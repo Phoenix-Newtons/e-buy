@@ -6,10 +6,7 @@
   <title>Mama Sarah Sales - E-Buy Uganda</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script>
-    // Suppress Tailwind CDN warning
-    console.warn = function() {};
-  </script>
+  <script>console.warn = function() {};</script>
 </head>
 <body class="bg-gray-50 font-sans">
 
@@ -35,26 +32,16 @@
             <h1 class="text-4xl font-bold">Mama Sarah Sales</h1>
             <span class="bg-amber-100 text-amber-700 text-sm px-4 py-1 rounded-full font-medium">Temporary Seller</span>
           </div>
-          
           <div class="flex items-center gap-4 mt-2 text-gray-600">
-            <span class="flex items-center gap-1">
-              <i class="fa-solid fa-location-dot"></i> Gulu Town
-            </span>
-            <span class="flex items-center gap-1">
-              <i class="fa-solid fa-clock text-amber-500"></i> Temporary Shop
-            </span>
+            <span><i class="fa-solid fa-location-dot"></i> Gulu Town</span>
+            <span><i class="fa-solid fa-clock text-amber-500"></i> Temporary Shop</span>
           </div>
-          
-          <p class="mt-4 text-gray-700 max-w-2xl">
-            Fresh farm produce, second-hand clothes, household items and more. 
-            Selling fast today! Limited time shop.
-          </p>
+          <p class="mt-4 text-gray-700">Fresh produce, clothes & household items • Selling fast today!</p>
         </div>
 
         <button onclick="contactTrader()" 
                 class="bg-green-600 text-white px-8 py-4 rounded-3xl flex items-center gap-3 hover:bg-green-700 text-lg font-semibold">
-          <i class="fa-brands fa-whatsapp text-2xl"></i> 
-          Chat on WhatsApp
+          <i class="fa-brands fa-whatsapp text-2xl"></i> Chat on WhatsApp
         </button>
       </div>
     </div>
@@ -62,41 +49,31 @@
 
   <div class="max-w-7xl mx-auto px-4 py-10">
     
+    <!-- Improved Real-time Search -->
+    <div class="max-w-xl mx-auto mb-8">
+      <input type="text" id="shopSearch" 
+             onkeyup="performShopSearch()"
+             class="w-full px-6 py-4 rounded-3xl border border-gray-300 focus:outline-none focus:border-green-500 text-lg"
+             placeholder="Search tomatoes, sofa, dresses, rice...">
+    </div>
+
     <!-- Warning Banner -->
     <div class="bg-amber-100 border border-amber-300 rounded-3xl p-4 mb-8 text-center">
-      <p class="text-amber-800 font-medium">
-        ⏰ This is a <strong>Temporary Shop</strong>. Listings are available for a limited time only.
-      </p>
+      <p class="text-amber-800 font-medium">⏰ This is a Temporary Shop • Listings available for limited time only</p>
     </div>
 
-    <!-- Filters -->
-    <div class="flex flex-wrap gap-4 mb-8">
-      <div class="bg-white px-5 py-3 rounded-2xl shadow-sm">All Items</div>
-      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-amber-50 cursor-pointer">Farm Produce</div>
-      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-amber-50 cursor-pointer">Clothes</div>
-      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-amber-50 cursor-pointer">Household</div>
-      <input type="text" id="shopSearch" placeholder="Search in this shop..." 
-             class="flex-1 max-w-xs px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none">
-    </div>
-
-    <!-- Products Grid -->
-    <h2 class="text-2xl font-semibold mb-6">Available Listings (12)</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="shopProducts">
-      <!-- Populated by JS -->
-    </div>
+    <h2 class="text-2xl font-semibold mb-6">Available Listings</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="shopProducts"></div>
   </div>
 
-  <footer class="bg-white border-t py-8 text-center text-sm text-gray-500">
-    <p>Trading with Mama Sarah Sales on E-Buy Uganda • Secure Mobile Money Payments</p>
-  </footer>
-
   <script>
-    const products = [
+    let allShopProducts = [
       { title: "Fresh Tomatoes - 50kg", price: "120,000", image: "🍅", status: "Fresh Today" },
       { title: "Second Hand Sofa Set", price: "350,000", image: "🛋️", status: "Good Condition" },
       { title: "Ladies Summer Dresses", price: "65,000", image: "👗", status: "Various Sizes" },
       { title: "Rice - 25kg Bag", price: "95,000", image: "🍚", status: "Wholesale" },
-      { title: "Used Bicycle", price: "180,000", image: "🚲", status: "Well Maintained" }
+      { title: "Used Bicycle", price: "180,000", image: "🚲", status: "Well Maintained" },
+      { title: "Fresh Beans - 30kg", price: "85,000", image: "🫘", status: "Farm Fresh" }
     ];
 
     function createProductCard(product) {
@@ -107,7 +84,7 @@
           ${product.image}
         </div>
         <div class="p-5">
-          <h3 class="font-semibold text-lg line-clamp-2">${product.title}</h3>
+          <h3 class="font-semibold text-lg">${product.title}</h3>
           <p class="text-green-600 font-bold text-2xl mt-2">UGX ${product.price}</p>
           <p class="text-sm text-amber-600 mt-1">${product.status}</p>
           
@@ -120,21 +97,39 @@
       return card;
     }
 
-    window.onload = function() {
+    function renderShopProducts(products) {
       const container = document.getElementById('shopProducts');
-      products.forEach(product => {
-        container.appendChild(createProductCard(product));
-      });
-    };
+      container.innerHTML = '';
+      products.forEach(p => container.appendChild(createProductCard(p)));
+    }
+
+    function performShopSearch() {
+      const query = document.getElementById('shopSearch').value.toLowerCase().trim();
+      
+      if (!query) {
+        renderShopProducts(allShopProducts);
+        return;
+      }
+
+      const filtered = allShopProducts.filter(product => 
+        product.title.toLowerCase().includes(query) ||
+        product.status.toLowerCase().includes(query)
+      );
+
+      renderShopProducts(filtered);
+    }
 
     function viewProduct(title) {
-      alert(`Opening product: ${title}\n\n(Redirecting to product detail page)`);
+      alert(`Opening product: ${title}`);
       // window.location.href = 'product-detail.html';
     }
 
     function contactTrader() {
       alert("✅ Opening WhatsApp to Mama Sarah Sales\nNumber: +256 777 987 654");
     }
+
+    // Initialize
+    window.onload = () => renderShopProducts(allShopProducts);
   </script>
 </body>
 </html>
