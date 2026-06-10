@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Messages - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    // Suppress Tailwind CDN warning
+    console.warn = function() {};
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+      </div>
+      <a href="buyer-dashboard.html" class="hover:underline">← Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 flex gap-8">
+    
+    <!-- Conversations List -->
+    <div class="w-96 bg-white rounded-3xl shadow h-fit">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold">My Messages</h2>
+        <p class="text-sm text-gray-500">2 unread conversations</p>
+      </div>
+      
+      <div class="divide-y" id="conversationsList">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Active Chat -->
+    <div class="flex-1 bg-white rounded-3xl shadow flex flex-col h-[650px]">
+      
+      <!-- Chat Header -->
+      <div class="p-6 border-b flex items-center gap-4">
+        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-3xl">📱</div>
+        <div class="flex-1">
+          <p class="font-semibold">Mukisa Electronics</p>
+          <p class="text-sm text-green-600">iPhone 13 - 128GB</p>
+        </div>
+        <button onclick="contactViaWhatsApp()" 
+                class="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-2xl hover:bg-green-700">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span class="text-sm">WhatsApp</span>
+        </button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50" id="chatWindow">
+        <!-- Messages populated by JS -->
+      </div>
+
+      <!-- Message Input -->
+      <div class="p-6 border-t bg-white rounded-b-3xl">
+        <div class="flex gap-3">
+          <input type="text" id="messageInput" 
+                 class="flex-1 px-6 py-4 border border-gray-300 rounded-3xl focus:outline-none focus:border-green-500"
+                 placeholder="Type your message...">
+          <button onclick="sendBuyerMessage()" 
+                  class="bg-green-600 hover:bg-green-700 text-white px-8 rounded-3xl">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const buyerConversations = [
+      {
+        seller: "Mukisa Electronics",
+        product: "iPhone 13 - 128GB",
+        lastMsg: "Yes, battery health is 92%. Would you like to meet tomorrow?",
+        time: "5 min ago",
+        unread: 1,
+        image: "📱"
+      },
+      {
+        seller: "Mama Sarah Sales",
+        product: "Fresh Tomatoes 50kg",
+        lastMsg: "I can deliver tomorrow morning.",
+        time: "Yesterday",
+        unread: 0,
+        image: "🍅"
+      }
+    ];
+
+    function createConversationCard(conv) {
+      const card = document.createElement('div');
+      card.className = `p-5 hover:bg-gray-50 cursor-pointer flex gap-4 border-b last:border-none ${conv.unread > 0 ? 'bg-green-50' : ''}`;
+      card.innerHTML = `
+        <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">${conv.image}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between">
+            <p class="font-semibold truncate">${conv.seller}</p>
+            <p class="text-xs text-gray-500">${conv.time}</p>
+          </div>
+          <p class="text-sm text-gray-600 truncate">${conv.product}</p>
+          <p class="text-sm text-gray-500 truncate mt-0.5">${conv.lastMsg}</p>
+        </div>
+        ${conv.unread > 0 ? `<span class="bg-green-600 text-white text-xs px-2 py-1 rounded-full self-start">${conv.unread}</span>` : ''}
+      `;
+      card.onclick = () => openBuyerChat(conv);
+      return card;
+    }
+
+    function openBuyerChat(conv) {
+      document.getElementById('chatWindow').innerHTML = `
+        <div class="flex flex-col h-full justify-end space-y-4">
+          <div class="text-center text-xs text-gray-400">Today</div>
+          
+          <div class="bg-gray-200 text-gray-700 px-5 py-3 rounded-3xl rounded-bl-none max-w-[80%] self-start">
+            Hi, is the iPhone still available?
+          </div>
+          
+          <div class="bg-green-600 text-white px-5 py-3 rounded-3xl rounded-br-none max-w-[80%] self-end">
+            Yes it is. Battery health 92%.
+          </div>
+          
+          <div class="bg-gray-200 text-gray-700 px-5 py-3 rounded-3xl rounded-bl-none max-w-[80%] self-start">
+            ${conv.lastMsg}
+          </div>
+        </div>
+      `;
+    }
+
+    function sendBuyerMessage() {
+      const input = document.getElementById('messageInput');
+      if (input.value.trim() === '') return;
+      
+      alert("✅ Message sent to seller!\n\nYou can also continue chatting directly on WhatsApp.");
+      input.value = '';
+    }
+
+    function contactViaWhatsApp() {
+      alert("✅ Opening WhatsApp chat with seller...");
+    }
+
+    // Initialize
+    window.onload = function() {
+      const list = document.getElementById('conversationsList');
+      buyerConversations.forEach(conv => {
+        list.appendChild(createConversationCard(conv));
+      });
+      
+      // Open first conversation by default
+      if (buyerConversations.length > 0) {
+        openBuyerChat(buyerConversations[0]);
+      }
+    };
+  </script>
+</body>
+</html>
