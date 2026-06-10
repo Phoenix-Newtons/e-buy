@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register as Buyer - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    // Suppress Tailwind CDN warning
+    console.warn = function() {};
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="login.html" class="hover:underline">Login</a>
+        <a href="trader-register.html" class="hover:underline">Register as Trader</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
+      
+      <div class="text-center mb-8">
+        <i class="fa-solid fa-user-plus text-5xl text-green-600 mb-4"></i>
+        <h2 class="text-3xl font-bold text-gray-800">Join as Buyer</h2>
+        <p class="text-gray-600 mt-2">Create your free account and start shopping</p>
+      </div>
+
+      <form id="buyerRegisterForm" class="space-y-6">
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="fullName" required 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
+                 placeholder="John Mukisa">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
+          <div class="flex gap-2">
+            <select class="px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500 w-28">
+              <option>+256</option>
+            </select>
+            <input type="tel" id="phone" required 
+                   class="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
+                   placeholder="700 123 456">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input type="password" id="password" required 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
+                 placeholder="Create a strong password">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+          <input type="password" id="confirmPassword" required 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
+                 placeholder="Confirm password">
+        </div>
+
+        <!-- 2FA Notice -->
+        <div class="bg-green-50 border border-green-200 rounded-2xl p-4 text-sm">
+          <i class="fa-solid fa-shield-halved text-green-600"></i>
+          <span class="ml-2 text-green-700">2-Factor Verification via SMS will be enabled on this account</span>
+        </div>
+
+        <button type="submit" 
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl transition text-lg">
+          Create Buyer Account
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-gray-500 mt-8">
+        Already have an account? 
+        <a href="login.html" class="text-green-600 font-semibold hover:underline">Login here</a>
+      </p>
+
+      <div class="text-center mt-8 text-xs text-gray-400">
+        Secured with MTN & Airtel Uganda • 2-Factor Authentication
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('buyerRegisterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        alert("❌ Passwords do not match!");
+        return;
+      }
+
+      alert("✅ Registration Successful!\n\nWelcome to E-Buy Uganda!\n\nA 2-Factor Verification code has been sent to your phone.");
+
+      // Redirect to buyer dashboard
+      setTimeout(() => {
+        window.location.href = 'buyer-dashboard.html';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temporary Trader Dashboard - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    // Suppress Tailwind CDN warning
+    console.warn = function() {};
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Top Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+        <span class="bg-amber-400 text-green-800 text-xs px-3 py-1 rounded-full font-bold">TEMPORARY</span>
+      </div>
+
+      <div class="flex-1 max-w-xl mx-8">
+        <div class="relative">
+          <input type="text" id="searchInput" 
+                 class="w-full px-5 py-3 rounded-full border-0 focus:outline-none text-gray-800" 
+                 placeholder="Search your listings...">
+          <button onclick="performSearch()" class="absolute right-4 top-1/2 -translate-y-1/2 text-green-600">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="seller-messages.html" class="hover:text-yellow-300 relative">
+          <i class="fa-solid fa-message text-xl"></i>
+        </a>
+        <a href="#" class="hover:text-yellow-300 relative">
+          <i class="fa-solid fa-bell text-xl"></i>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-[10px] px-1.5 rounded-full">3</span>
+        </a>
+        <div class="flex items-center gap-3 cursor-pointer" onclick="toggleProfileMenu()">
+          <div class="w-9 h-9 bg-white text-green-600 rounded-full flex items-center justify-center font-bold">TS</div>
+          <div>
+            <p class="text-sm font-medium">Mama Sarah Sales</p>
+            <p class="text-xs text-green-200">Temporary Seller</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 flex gap-8">
+    
+    <!-- Sidebar -->
+    <div class="w-64 bg-white rounded-3xl shadow p-6 h-fit sticky top-24">
+      <div class="space-y-6">
+        <a href="temporary-trader-dashboard.html" class="flex items-center gap-3 text-green-600 font-semibold">
+          <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+        <a href="#" class="flex items-center gap-3 hover:text-green-600 transition">
+          <i class="fa-solid fa-box"></i> My Listings
+        </a>
+        <a href="add-product.html" class="flex items-center gap-3 hover:text-green-600 transition">
+          <i class="fa-solid fa-plus-circle"></i> Add New Product
+        </a>
+        <a href="trader-earnings.html" class="flex items-center gap-3 hover:text-green-600 transition">
+          <i class="fa-solid fa-chart-line"></i> Sales & Earnings
+        </a>
+        <a href="seller-messages.html" class="flex items-center gap-3 hover:text-green-600 transition">
+          <i class="fa-solid fa-message"></i> Messages
+        </a>
+        <a href="temporary-shop.html" class="flex items-center gap-3 hover:text-green-600 transition">
+          <i class="fa-solid fa-shop"></i> View Shop
+        </a>
+        
+        <hr>
+        
+        <div>
+          <p class="text-xs uppercase text-gray-500 mb-2">Payment Model</p>
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <p class="font-semibold text-amber-700">Pay After Sale</p>
+            <p class="text-sm text-amber-600">No upfront fee • Service fee deducted only when item is sold</p>
+            <p class="text-xs text-green-600 mt-3">✅ Money sent to your MTN/Airtel after sale</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1">
+      
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-3xl font-bold">Welcome back, Mama Sarah Sales 👋</h1>
+          <p class="text-gray-600">List freely • Pay only when your item is sold</p>
+        </div>
+        <button onclick="window.location.href='add-product.html'" 
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-semibold">
+          <i class="fa-solid fa-plus"></i> Add New Product
+        </button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-white rounded-3xl p-6 shadow">
+          <p class="text-gray-500 text-sm">Sales Today</p>
+          <p class="text-3xl font-bold text-green-600 mt-2">UGX 185,000</p>
+          <p class="text-xs text-green-500">2 items sold</p>
+        </div>
+        <div class="bg-white rounded-3xl p-6 shadow">
+          <p class="text-gray-500 text-sm">Active Listings</p>
+          <p class="text-3xl font-bold text-green-600 mt-2">7</p>
+          <p class="text-xs text-amber-500">Free to list</p>
+        </div>
+        <div class="bg-white rounded-3xl p-6 shadow">
+          <p class="text-gray-500 text-sm">Pending Fees</p>
+          <p class="text-3xl font-bold text-amber-600 mt-2">UGX 45,000</p>
+          <p class="text-xs text-amber-500">To be deducted after verification</p>
+        </div>
+        <div class="bg-white rounded-3xl p-6 shadow">
+          <p class="text-gray-500 text-sm">Shop Views Today</p>
+          <p class="text-3xl font-bold text-blue-600 mt-2">62</p>
+        </div>
+      </div>
+
+      <!-- Active Listings -->
+      <section class="mb-12">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-semibold">Active Listings</h2>
+          <a href="#" class="text-green-600 hover:underline text-sm">View All →</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="listingsGrid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Info Banner -->
+      <div class="bg-green-100 border border-green-300 rounded-3xl p-6 text-center">
+        <p class="text-green-800 font-medium">
+          As a Temporary Seller, you only pay the E-Buy service fee <strong>after your item is successfully sold</strong>.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const sampleListings = [
+      { title: "Fresh Tomatoes - 50kg", price: "120,000", status: "Active", views: 45, image: "🍅" },
+      { title: "Second Hand Sofa Set", price: "350,000", status: "Sold Today", views: 28, image: "🛋️" },
+      { title: "Ladies Handbags", price: "65,000", status: "Active", views: 19, image: "👜" }
+    ];
+
+    function createListingCard(item) {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-3xl shadow hover:shadow-xl transition overflow-hidden";
+      card.innerHTML = `
+        <div class="h-44 bg-gray-100 flex items-center justify-center text-6xl border-b">${item.image}</div>
+        <div class="p-5">
+          <h3 class="font-semibold">${item.title}</h3>
+          <p class="text-green-600 font-bold text-xl mt-1">UGX ${item.price}</p>
+          <div class="flex justify-between text-sm mt-4">
+            <span class="${item.status === 'Sold Today' ? 'text-amber-500' : 'text-green-500'} font-medium">${item.status}</span>
+            <span class="text-gray-400">${item.views} views</span>
+          </div>
+          <div class="mt-5 flex gap-3">
+            <button onclick="editListing()" class="flex-1 border border-gray-300 py-3 rounded-2xl hover:bg-gray-50">Edit</button>
+            <button onclick="contactBuyers()" class="flex-1 bg-green-600 text-white py-3 rounded-2xl hover:bg-green-700">Messages</button>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    window.onload = function() {
+      const grid = document.getElementById('listingsGrid');
+      sampleListings.forEach(item => grid.appendChild(createListingCard(item)));
+    };
+
+    function editListing() {
+      alert("✏️ Edit your listing here.");
+    }
+
+    function contactBuyers() {
+      alert("💬 Buyer messages appear here.");
+    }
+
+    function performSearch() {
+      alert("🔍 Searching your listings...");
+    }
+
+    function toggleProfileMenu() {
+      alert("Temporary Trader Menu:\n• Sales History\n• Payment History\n• Shop Settings\n• Logout");
+    }
+  </script>
+</body>
+</html>
