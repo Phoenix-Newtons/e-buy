@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    // Suppress Tailwind CDN warning
+    console.warn = function() {};
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+      </div>
+      <a href="buyer-dashboard.html" class="hover:underline">← Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">My Orders</h1>
+
+    <div class="bg-white rounded-3xl shadow overflow-hidden">
+      <!-- Tabs -->
+      <div class="flex border-b">
+        <button onclick="switchTab(0)" id="tabAll" 
+                class="flex-1 py-4 text-center font-semibold border-b-2 border-green-600 text-green-600">All Orders</button>
+        <button onclick="switchTab(1)" id="tabPending" 
+                class="flex-1 py-4 text-center font-semibold text-gray-500">Pending</button>
+        <button onclick="switchTab(2)" id="tabCompleted" 
+                class="flex-1 py-4 text-center font-semibold text-gray-500">Completed</button>
+      </div>
+
+      <!-- Orders List -->
+      <div class="divide-y" id="ordersList">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const orders = [
+      {
+        id: "EB-78492",
+        title: "iPhone 13 - 128GB",
+        price: "1,200,000",
+        status: "Completed",
+        date: "June 05, 2026",
+        seller: "Mukisa Electronics",
+        image: "📱"
+      },
+      {
+        id: "EB-78491",
+        title: "Fresh Tomatoes 50kg",
+        price: "120,000",
+        status: "Pending",
+        date: "June 06, 2026",
+        seller: "Mama Sarah Sales",
+        image: "🍅"
+      },
+      {
+        id: "EB-78490",
+        title: "Wooden Dining Table",
+        price: "450,000",
+        status: "Completed",
+        date: "June 02, 2026",
+        seller: "Gulu Furniture",
+        image: "🪑"
+      }
+    ];
+
+    function createOrderCard(order) {
+      const statusColor = order.status === "Completed" ? "text-green-600" : "text-amber-600";
+      const card = document.createElement('div');
+      card.className = "p-6 hover:bg-gray-50 transition flex gap-6";
+      card.innerHTML = `
+        <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0">
+          ${order.image}
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between">
+            <div>
+              <h3 class="font-semibold text-lg">${order.title}</h3>
+              <p class="text-sm text-gray-500">Order #${order.id} • ${order.date}</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-green-600">UGX ${order.price}</p>
+              <p class="${statusColor} font-medium">${order.status}</p>
+            </div>
+          </div>
+          
+          <p class="text-sm text-gray-600 mt-2">Seller: ${order.seller}</p>
+          
+          <div class="mt-5 flex gap-4">
+            ${order.status === "Completed" ? 
+              `<button onclick="contactSeller('${order.seller}')" class="text-green-600 hover:underline text-sm flex items-center gap-1">
+                <i class="fa-brands fa-whatsapp"></i> Message Seller
+              </button>` : 
+              `<button onclick="trackOrder('${order.id}')" class="text-amber-600 hover:underline text-sm">Track Order</button>`
+            }
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function loadOrders(filteredOrders) {
+      const container = document.getElementById('ordersList');
+      container.innerHTML = '';
+      filteredOrders.forEach(order => {
+        container.appendChild(createOrderCard(order));
+      });
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tabAll').classList.remove('border-green-600', 'text-green-600');
+      document.getElementById('tabPending').classList.remove('border-green-600', 'text-green-600');
+      document.getElementById('tabCompleted').classList.remove('border-green-600', 'text-green-600');
+      
+      if (tab === 0) {
+        document.getElementById('tabAll').classList.add('border-green-600', 'text-green-600');
+        loadOrders(orders);
+      } else if (tab === 1) {
+        document.getElementById('tabPending').classList.add('border-green-600', 'text-green-600');
+        loadOrders(orders.filter(o => o.status === "Pending"));
+      } else {
+        document.getElementById('tabCompleted').classList.add('border-green-600', 'text-green-600');
+        loadOrders(orders.filter(o => o.status === "Completed"));
+      }
+    }
+
+    function contactSeller(seller) {
+      alert(`✅ Opening WhatsApp with ${seller}`);
+    }
+
+    function trackOrder(orderId) {
+      alert(`📍 Tracking Order #${orderId}\n\nStatus: Waiting for delivery confirmation.`);
+    }
+
+    // Initialize
+    window.onload = () => {
+      loadOrders(orders);
+    };
+  </script>
+</body>
+</html>
