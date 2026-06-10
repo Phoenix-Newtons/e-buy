@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mukisa Electronics - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    // Suppress Tailwind CDN warning
+    console.warn = function() {};
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+      </div>
+      <a href="buyer-dashboard.html" class="hover:underline">← Back to Browse</a>
+    </div>
+  </nav>
+
+  <!-- Shop Header -->
+  <div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+        <div class="w-28 h-28 bg-green-100 rounded-3xl flex items-center justify-center text-6xl flex-shrink-0">📱</div>
+        
+        <div class="flex-1">
+          <div class="flex items-center gap-3">
+            <h1 class="text-4xl font-bold">Mukisa Electronics</h1>
+            <span class="bg-green-100 text-green-700 text-sm px-4 py-1 rounded-full font-medium">Permanent Trader</span>
+          </div>
+          
+          <div class="flex items-center gap-4 mt-2 text-gray-600">
+            <span class="flex items-center gap-1">
+              <i class="fa-solid fa-location-dot"></i> Kampala - Kisaasi
+            </span>
+            <span class="flex items-center gap-1">
+              <i class="fa-solid fa-star text-yellow-400"></i> 4.8 (124 reviews)
+            </span>
+          </div>
+          
+          <p class="mt-4 text-gray-700 max-w-2xl">
+            Trusted seller of new & second-hand phones, laptops, and accessories. 
+            Fast delivery across Uganda. Over 5 years on E-Buy.
+          </p>
+        </div>
+
+        <button onclick="contactTrader()" 
+                class="bg-green-600 text-white px-8 py-4 rounded-3xl flex items-center gap-3 hover:bg-green-700 text-lg font-semibold">
+          <i class="fa-brands fa-whatsapp text-2xl"></i> 
+          Chat on WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-4 mb-8">
+      <div class="bg-white px-5 py-3 rounded-2xl shadow-sm">All Products</div>
+      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-green-50 cursor-pointer">Phones</div>
+      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-green-50 cursor-pointer">Accessories</div>
+      <div class="bg-white px-5 py-3 rounded-2xl hover:bg-green-50 cursor-pointer">Laptops</div>
+      <input type="text" id="shopSearch" placeholder="Search in this shop..." 
+             class="flex-1 max-w-xs px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none">
+    </div>
+
+    <!-- Products Grid -->
+    <h2 class="text-2xl font-semibold mb-6">All Listings (24)</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="shopProducts">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <footer class="bg-white border-t py-8 text-center text-sm text-gray-500">
+    <p>Trading with Mukisa Electronics on E-Buy Uganda • Secure Payments via MTN & Airtel</p>
+  </footer>
+
+  <script>
+    const products = [
+      { title: "iPhone 13 - 128GB", price: "1,200,000", image: "📱", status: "Excellent Condition" },
+      { title: "Samsung Galaxy A54", price: "850,000", image: "📱", status: "Like New" },
+      { title: "Tecno Spark 20", price: "650,000", image: "📱", status: "New" },
+      { title: "Wireless Earbuds", price: "85,000", image: "🎧", status: "Original" },
+      { title: "Power Bank 20,000mAh", price: "95,000", image: "🔋", status: "Fast Charging" }
+    ];
+
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-3xl shadow hover:shadow-xl transition overflow-hidden cursor-pointer";
+      card.innerHTML = `
+        <div class="h-52 bg-gray-100 flex items-center justify-center text-7xl border-b" onclick="viewProduct('${product.title}')">
+          ${product.image}
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg line-clamp-2">${product.title}</h3>
+          <p class="text-green-600 font-bold text-2xl mt-2">UGX ${product.price}</p>
+          <p class="text-sm text-gray-500 mt-1">${product.status}</p>
+          
+          <button onclick="contactTrader(); event.stopImmediatePropagation()" 
+                  class="mt-5 w-full bg-green-600 text-white py-3 rounded-2xl hover:bg-green-700 transition">
+            Contact Seller
+          </button>
+        </div>
+      `;
+      return card;
+    }
+
+    window.onload = function() {
+      const container = document.getElementById('shopProducts');
+      products.forEach(product => {
+        container.appendChild(createProductCard(product));
+      });
+    };
+
+    function viewProduct(title) {
+      alert(`Opening product: ${title}\n\n(Redirecting to product detail page)`);
+      // window.location.href = 'product-detail.html';
+    }
+
+    function contactTrader() {
+      alert("✅ Opening WhatsApp to Mukisa Electronics\nNumber: +256 700 123 456");
+    }
+  </script>
+</body>
+</html>
