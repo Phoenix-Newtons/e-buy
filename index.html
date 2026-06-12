@@ -6,17 +6,8 @@
   <title>E-Buy Uganda | Buy & Sell Old & New Stuff</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script>
-    // Suppress Tailwind CDN warning
-    console.warn = function() {};
-  </script>
 </head>
-  <nav class="bg-green-600 dark:bg-gray-900 text-white py-4 sticky top-0 z-50 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <i class="fa-solid fa-store text-3xl"></i>
-      <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
-    </div>
+<body class="bg-gray-50 font-sans">
 
   <!-- Navbar -->
   <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
@@ -25,98 +16,59 @@
         <i class="fa-solid fa-store text-3xl"></i>
         <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
       </div>
-      <div class="hidden md:flex gap-6">
-        <a href="#" class="hover:underline">Buy</a>
-        <a href="#" class="hover:underline">Sell</a>
-        <a href="#" class="hover:underline">Shops</a>
-        <a href="#" class="hover:underline">Categories</a>
-      </div>
       <div class="flex items-center gap-4">
-        <button onclick="window.location.href='login.html'" 
-                class="px-5 py-2 border border-white rounded-full hover:bg-white hover:text-green-600">Login</button>
-        <button onclick="window.location.href='trader-register.html'" 
-                class="bg-white text-green-600 px-5 py-2 rounded-full font-semibold">Register Free</button>
+        <a href="login.html" class="hover:underline">Login</a>
+        <a href="buyer-register.html" class="hover:underline">Buyer Register</a>
+        <a href="trader-register.html" class="hover:underline">Trader Register</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="bg-gradient-to-r from-green-700 to-green-500 text-white py-20">
     <div class="max-w-7xl mx-auto px-4 text-center">
       <h2 class="text-5xl font-bold mb-6">Buy & Sell Old & New Stuff <span class="text-yellow-300">Anywhere in Uganda</span></h2>
-      <p class="text-xl mb-8">From Kampala to Gulu, connect directly with trusted traders via WhatsApp • MTN • Airtel</p>
+      <p class="text-xl mb-8">Permanent Traders • Temporary Sellers • Buyers</p>
       
-      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <button onclick="window.location.href='buyer-register.html'" 
-                class="bg-white text-green-600 text-lg font-semibold px-10 py-4 rounded-xl hover:scale-105 transition">
-          I'm a Buyer - Start Shopping
+                class="bg-white text-green-600 px-10 py-4 rounded-2xl text-lg font-semibold">
+          Start Shopping as Buyer
         </button>
         <button onclick="window.location.href='trader-register.html'" 
-                class="bg-yellow-400 text-green-800 text-lg font-semibold px-10 py-4 rounded-xl hover:scale-105 transition">
+                class="bg-yellow-400 text-green-800 px-10 py-4 rounded-2xl text-lg font-semibold">
           Become a Seller
         </button>
       </div>
-
-      <p class="mt-6 text-sm opacity-90">2-Factor Verification • Secure Mobile Money Payments</p>
     </div>
   </section>
-
-  <!-- Quick Stats -->
-  <div class="bg-white py-6 shadow">
-    <div class="max-w-7xl mx-auto px-4 grid grid-cols-3 gap-4 text-center">
-      <div>
-        <h3 class="text-3xl font-bold text-green-600">12,450+</h3>
-        <p class="text-gray-600">Active Listings</p>
-      </div>
-      <div>
-        <h3 class="text-3xl font-bold text-green-600">8,200+</h3>
-        <p class="text-gray-600">Happy Buyers</p>
-      </div>
-      <div>
-        <h3 class="text-3xl font-bold text-green-600">1,450+</h3>
-        <p class="text-gray-600">Traders</p>
-      </div>
-    </div>
-  </div>
 
   <!-- How It Works -->
-  <section class="py-16 bg-white">
+  <section class="py-16">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-4xl font-bold text-center mb-12">How E-Buy Works</h2>
-      <div class="grid md:grid-cols-3 gap-10">
-        <div class="border border-green-200 rounded-2xl p-8 hover:shadow-xl transition">
-          <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
-            <i class="fa-solid fa-briefcase text-3xl text-green-600"></i>
-          </div>
-          <h3 class="text-2xl font-semibold mb-3">Permanent Traders</h3>
-          <p class="text-gray-600 mb-4">Full online shop. Unlimited listings. Monthly subscription.</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🛒</div>
+          <h3 class="text-2xl font-semibold mb-2">Buyers</h3>
+          <p class="text-gray-600">Browse products, chat via WhatsApp, pay with Mobile Money</p>
         </div>
-
-        <div class="border border-green-200 rounded-2xl p-8 hover:shadow-xl transition">
-          <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
-            <i class="fa-solid fa-clock text-3xl text-amber-600"></i>
-          </div>
-          <h3 class="text-2xl font-semibold mb-3">Temporary Sellers</h3>
-          <p class="text-gray-600 mb-4">Quick shop. Pay only after item is sold.</p>
+        <div class="text-center">
+          <div class="text-6xl mb-4">🏪</div>
+          <h3 class="text-2xl font-semibold mb-2">Permanent Traders</h3>
+          <p class="text-gray-600">Monthly subscription • Full online shop</p>
         </div>
-
-        <div class="border border-green-200 rounded-2xl p-8 hover:shadow-xl transition">
-          <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-            <i class="fa-solid fa-shopping-bag text-3xl text-blue-600"></i>
-          </div>
-          <h3 class="text-2xl font-semibold mb-3">Buyers</h3>
-          <p class="text-gray-600 mb-4">Browse, chat via WhatsApp, buy safely.</p>
+        <div class="text-center">
+          <div class="text-6xl mb-4">⏰</div>
+          <h3 class="text-2xl font-semibold mb-2">Temporary Sellers</h3>
+          <p class="text-gray-600">Pay only after item is sold</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="mb-4">E-Buy Uganda © 2026 • MTN & Airtel Mobile Money • 2-Factor Security</p>
-      <p class="text-sm text-gray-400">Connecting buyers and sellers across Uganda</p>
-    </div>
+  <footer class="bg-gray-900 text-white py-12 text-center">
+    <p>E-Buy Uganda © 2026 • MTN & Airtel • 2-Factor Verification</p>
   </footer>
 </body>
 </html>
