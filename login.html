@@ -6,25 +6,11 @@
   <title>Login - E-Buy Uganda</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Suppress Tailwind CDN warning
     console.warn = function() {};
   </script>
 </head>
-  <nav class="bg-green-600 dark:bg-gray-900 text-white py-4 sticky top-0 z-50 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <i class="fa-solid fa-store text-3xl"></i>
-      <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
-    </div>
-
-    <!-- Dark Mode Toggle -->
-    <button onclick="toggleDarkMode()" 
-            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition">
-      <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
-    </button>
-  </div>
-</nav>
 <body class="bg-gray-50 font-sans">
 
   <!-- Navbar -->
@@ -34,11 +20,7 @@
         <i class="fa-solid fa-store text-3xl"></i>
         <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="buyer-register.html" class="hover:underline">Register as Buyer</a>
-        <a href="trader-register.html" class="hover:underline">Register as Trader</a>
-      </div>
+      <a href="index.html" class="hover:underline">Home</a>
     </div>
   </nav>
 
@@ -48,81 +30,62 @@
       <div class="text-center mb-8">
         <i class="fa-solid fa-right-to-bracket text-5xl text-green-600 mb-4"></i>
         <h2 class="text-3xl font-bold text-gray-800">Welcome Back</h2>
-        <p class="text-gray-600 mt-2">Login to continue buying or selling</p>
+        <p class="text-gray-600 mt-2">Login with your email</p>
       </div>
 
       <form id="loginForm" class="space-y-6">
-        
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
-          <div class="flex gap-2">
-            <select class="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-green-500 w-28">
-              <option>+256</option>
-            </select>
-            <input type="tel" required id="phone" 
-                   class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-green-500" 
-                   placeholder="7XX XXX XXX">
-          </div>
-          <p class="text-xs text-gray-500 mt-1">Used for MTN & Airtel Mobile Money</p>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input type="password" required id="password" 
-                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-green-500" 
-                 placeholder="••••••••">
-        </div>
-
-        <!-- 2FA Reminder -->
-        <div class="bg-green-50 border border-green-200 rounded-2xl p-4 text-sm flex items-center gap-3">
-          <i class="fa-solid fa-shield-halved text-green-600"></i>
-          <p class="text-green-700 text-xs">2-Factor Verification will be required after login via SMS.</p>
-        </div>
-
-        <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center gap-2">
-            <input type="checkbox" class="w-4 h-4 accent-green-600">
-            <span class="text-gray-600">Remember me</span>
-          </label>
-          <a href="#" class="text-green-600 hover:underline">Forgot Password?</a>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input type="email" id="email" required
+                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500"
+                 placeholder="your@email.com">
         </div>
 
         <button type="submit" 
                 class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl transition text-lg">
-          Login Securely
+          Send Login OTP
         </button>
       </form>
 
       <p class="text-center text-sm text-gray-500 mt-8">
         Don't have an account? 
-        <a href="buyer-register.html" class="text-green-600 font-semibold hover:underline">Join as Buyer</a> or 
-        <a href="trader-register.html" class="text-green-600 font-semibold hover:underline">Become a Trader</a>
+        <a href="buyer-register.html" class="text-green-600 font-semibold hover:underline">Sign Up</a>
       </p>
 
       <div class="text-center mt-8 text-xs text-gray-400">
-        Secured with 2-Factor Authentication • MTN & Airtel Uganda
+        Secured with Supabase • MTN & Airtel Uganda
       </div>
     </div>
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // === YOUR SUPABASE CONFIG ===
+    const supabaseUrl = 'https://nzsbvtepxuqheebdwtei.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56c2J2dGVweHVxaGVlYmR3dGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjc2NzgsImV4cCI6MjA5NjcwMzY3OH0.WZ5_6yX_pmHpO4DU4rtQpKgFXCSZrhVSi6CzaEYTWus';
+
+    const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      const phone = document.getElementById('phone').value;
-      const password = document.getElementById('password').value;
-      
-      if (!phone || !password) {
-        alert("Please enter your phone number and password.");
+      const email = document.getElementById('email').value.trim();
+
+      if (!email) {
+        alert("Please enter your email address");
         return;
       }
 
-      alert(`✅ Login Successful!\n\nWelcome back!\n\nA 2-Factor Verification code has been sent to +256 ${phone}.\n\nPlease enter the code to complete login.`);
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: 'https://phoenix-newtons.github.io/e-buy/buyer-dashboard.html'
+        }
+      });
 
-      // Redirect to appropriate dashboard (for demo)
-      setTimeout(() => {
-        window.location.href = 'buyer-dashboard.html';
-      }, 1500);
+      if (error) {
+        alert("Error: " + error.message);
+      } else {
+        alert(`✅ Login OTP sent to ${email}\n\nPlease check your inbox (and spam folder) for the code.`);
+      }
     });
   </script>
 </body>
