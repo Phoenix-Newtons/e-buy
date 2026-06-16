@@ -43,7 +43,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Shop / Business Name</label>
           <input type="text" id="shopName" required 
                  class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
-                 placeholder="Mukisa Electronics or Mama Sarah Sales">
+                 placeholder="Mukisa Electronics">
         </div>
 
         <div>
@@ -63,16 +63,11 @@
           Send OTP via SMS
         </button>
       </form>
-
-      <p class="text-center text-sm text-gray-500 mt-8">
-        Already have an account? 
-        <a href="login.html" class="text-green-600 font-semibold hover:underline">Login here</a>
-      </p>
     </div>
   </div>
 
   <script>
-    let traderType = 0; // 0 = Permanent, 1 = Temporary
+    let traderType = 0;
 
     function selectType(type) {
       traderType = type;
@@ -88,12 +83,8 @@
       }
     }
 
-    // Africa's Talking Credentials
     const AT_USERNAME = "phoenix-newtons";
     const AT_API_KEY = "atsk_f11a23cdbd597e52595a981c8002711787c1dc9a49b81e95dc1dfebd4b6923a5f1e07a69";
-
-    // Supabase Verify OTP Function URL
-    const VERIFY_OTP_URL = "https://nzsbvtepxuqheebdwtei.supabase.co/functions/v1/verify-otp";
 
     document.getElementById('traderRegisterForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -106,13 +97,11 @@
         return;
       }
 
-      // Format phone number
       phone = countryCode.replace('+', '') + phone.replace(/^0/, '');
 
       alert(`Sending OTP to +${phone}...`);
 
       try {
-        // Send OTP via Africa's Talking
         await fetch('https://api.africastalking.com/version1/messaging', {
           method: 'POST',
           headers: {
@@ -123,17 +112,15 @@
           body: new URLSearchParams({
             username: AT_USERNAME,
             to: '+' + phone,
-            message: `Your E-Buy Uganda trader registration code is: 123456. Valid for 5 minutes.`
+            message: `Your E-Buy Uganda verification code is: ${Math.floor(100000 + Math.random() * 900000)}. Valid for 5 minutes.`
           })
         });
 
-        // Ask for OTP
         const userOtp = prompt("Enter the 6-digit OTP sent to your phone:");
 
         if (!userOtp) return;
 
-        // Verify OTP using Supabase Edge Function
-        const verifyResponse = await fetch(VERIFY_OTP_URL, {
+        const verifyResponse = await fetch('https://nzsbvtepxuqheebdwtei.supabase.co/functions/v1/verify-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: phone, otp: userOtp })
@@ -143,7 +130,7 @@
 
         if (result.success) {
           const type = traderType === 0 ? "Permanent Trader" : "Temporary Seller";
-          alert(`✅ Registration Successful!\n\nWelcome as ${type}!`);
+          alert(`✅ Registration Successful as ${type}!`);
           window.location.href = traderType === 0 ? "trader-dashboard.html" : "temporary-trader-dashboard.html";
         } else {
           alert(result.error || "Invalid OTP. Please try again.");
@@ -155,7 +142,6 @@
       }
     });
 
-    // Default selection
     window.onload = () => selectType(0);
   </script>
 </body>
