@@ -6,25 +6,7 @@
   <title>Register as Buyer - E-Buy Uganda</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script>
-    // Suppress Tailwind CDN warning
-    console.warn = function() {};
-  </script>
 </head>
-  <nav class="bg-green-600 dark:bg-gray-900 text-white py-4 sticky top-0 z-50 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <i class="fa-solid fa-store text-3xl"></i>
-      <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
-    </div>
-
-    <!-- Dark Mode Toggle -->
-    <button onclick="toggleDarkMode()" 
-            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition">
-      <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
-    </button>
-  </div>
-</nav>
 <body class="bg-gray-50 font-sans">
 
   <!-- Navbar -->
@@ -34,11 +16,7 @@
         <i class="fa-solid fa-store text-3xl"></i>
         <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="login.html" class="hover:underline">Login</a>
-        <a href="trader-register.html" class="hover:underline">Register as Trader</a>
-      </div>
+      <a href="index.html" class="hover:underline">Home</a>
     </div>
   </nav>
 
@@ -47,8 +25,8 @@
       
       <div class="text-center mb-8">
         <i class="fa-solid fa-user-plus text-5xl text-green-600 mb-4"></i>
-        <h2 class="text-3xl font-bold text-gray-800">Join as Buyer</h2>
-        <p class="text-gray-600 mt-2">Create your free account and start shopping</p>
+        <h2 class="text-3xl font-bold text-gray-800">Register as Buyer</h2>
+        <p class="text-gray-600 mt-2">Create your free account</p>
       </div>
 
       <form id="buyerRegisterForm" class="space-y-6">
@@ -63,7 +41,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
           <div class="flex gap-2">
-            <select class="px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500 w-28">
+            <select id="countryCode" class="px-4 py-3 border border-gray-300 rounded-2xl w-28">
               <option>+256</option>
             </select>
             <input type="tel" id="phone" required 
@@ -72,29 +50,9 @@
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input type="password" id="password" required 
-                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
-                 placeholder="Create a strong password">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-          <input type="password" id="confirmPassword" required 
-                 class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
-                 placeholder="Confirm password">
-        </div>
-
-        <!-- 2FA Notice -->
-        <div class="bg-green-50 border border-green-200 rounded-2xl p-4 text-sm">
-          <i class="fa-solid fa-shield-halved text-green-600"></i>
-          <span class="ml-2 text-green-700">2-Factor Verification via SMS will be enabled on this account</span>
-        </div>
-
         <button type="submit" 
                 class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl transition text-lg">
-          Create Buyer Account
+          Send OTP via SMS
         </button>
       </form>
 
@@ -102,31 +60,69 @@
         Already have an account? 
         <a href="login.html" class="text-green-600 font-semibold hover:underline">Login here</a>
       </p>
-
-      <div class="text-center mt-8 text-xs text-gray-400">
-        Secured with MTN & Airtel Uganda • 2-Factor Authentication
-      </div>
     </div>
   </div>
 
   <script>
-    document.getElementById('buyerRegisterForm').addEventListener('submit', function(e) {
+    // Africa's Talking Credentials
+    const AT_USERNAME = "phoenix-newtons";
+    const AT_API_KEY = "atsk_f11a23cdbd597e52595a981c8002711787c1dc9a49b81e95dc1dfebd4b6923a5f1e07a69";
+
+    document.getElementById('buyerRegisterForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      
-      if (password !== confirmPassword) {
-        alert("❌ Passwords do not match!");
+      let phone = document.getElementById('phone').value.trim();
+      const countryCode = document.getElementById('countryCode').value;
+
+      if (!phone) {
+        alert("Please enter your phone number");
         return;
       }
 
-      alert("✅ Registration Successful!\n\nWelcome to E-Buy Uganda!\n\nA 2-Factor Verification code has been sent to your phone.");
+      // Format phone number
+      phone = countryCode.replace('+', '') + phone.replace(/^0/, '');
 
-      // Redirect to buyer dashboard
-      setTimeout(() => {
-        window.location.href = 'buyer-dashboard.html';
-      }, 1500);
+      alert(`Sending OTP to +${phone}...`);
+
+      try {
+        await fetch('https://api.africastalking.com/version1/messaging', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'apiKey': AT_API_KEY
+          },
+          body: new URLSearchParams({
+            username: AT_USERNAME,
+            to: '+' + phone,
+            message: `Your E-Buy Uganda buyer registration code is: 123456. Valid for 5 minutes.`
+          })
+        });
+
+        const userOtp = prompt("Enter the 6-digit OTP sent to your phone:");
+
+        if (!userOtp) return;
+
+        // Call your Supabase verify-otp function
+        const verifyResponse = await fetch('https://nzsbvtepxuqheebdwtei.supabase.co/functions/v1/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: phone, otp: userOtp })
+        });
+
+        const result = await verifyResponse.json();
+
+        if (result.success) {
+          alert("✅ Registration Successful! Welcome to E-Buy Uganda.");
+          window.location.href = "buyer-dashboard.html";
+        } else {
+          alert(result.error || "Invalid OTP. Please try again.");
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert("Failed to send or verify OTP. Please check your Africa's Talking balance.");
+      }
     });
   </script>
 </body>
