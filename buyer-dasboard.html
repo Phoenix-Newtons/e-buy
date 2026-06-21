@@ -3,117 +3,374 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - E-Buy Uganda</title>
+  <title>Buyer Dashboard - E-Buy Uganda</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>console.warn = function() {};</script>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans overflow-x-hidden min-h-screen">
 
-  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-store text-3xl"></i>
-        <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
+  <div id="mobileMenuDrawer" class="fixed inset-0 bg-green-700 z-[100] transform -translate-y-full transition-transform duration-300 ease-in-out flex flex-col md:hidden">
+    <div class="flex justify-between items-center px-4 py-4 bg-green-800">
+      <div class="flex items-center gap-3 text-white">
+        <i class="fa-solid fa-store text-2xl"></i>
+        <h1 class="text-2xl font-bold tracking-tight">E-Buy Uganda</h1>
       </div>
-      <a href="index.html" class="hover:underline">Home</a>
+      <button id="menuCloseBtn" class="text-white hover:text-gray-200 focus:outline-none transition-transform active:scale-90">
+        <i class="fa-solid fa-xmark text-3xl"></i>
+      </button>
     </div>
-  </nav>
 
-  <div class="min-h-screen flex items-center justify-center py-12 px-4">
-    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold">Login</h2>
-        <p class="text-gray-600 mt-2">Enter your MTN or Airtel number</p>
-      </div>
-
-      <form id="loginForm" class="space-y-6">
-        <div>
-          <label class="block text-sm font-medium mb-1">Phone Number</label>
-          <div class="flex gap-2">
-            <select id="countryCode" class="px-4 py-3 border border-gray-300 rounded-2xl w-28 bg-gray-50">
-              <option>+256</option>
-            </select>
-            <input type="tel" id="phone" required placeholder="700 123 456"
-                   class="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500">
-          </div>
-        </div>
-
-        <button type="submit" id="loginBtn"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-2xl transition">
-          Send OTP via SMS
-        </button>
-      </form>
+    <div class="flex flex-col px-6 py-8 space-y-6 text-white text-lg font-bold tracking-wide">
+      <a href="buyer-dashboard.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-house w-8"></i> Home</a>
+      <a href="categories.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-th-large w-8"></i> Categories</a>
+      <a href="my-orders.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-bag-shopping w-8"></i> My Orders</a>
+      <a href="buyer-messages.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-message w-8"></i> Messages</a>
+      <a href="profile.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-user w-8"></i> Profile</a>
+      <hr class="border-green-600">
+      <button onclick="logout()" class="text-left text-red-300 hover:text-red-100 transition-colors"><i class="fa-solid fa-right-from-bracket w-8"></i> Logout</button>
     </div>
   </div>
 
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50 shadow-sm" id="mainNav">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold hidden sm:block">E-Buy Uganda</h1>
+      </div>
+      
+      <div class="flex-1 max-w-xl mx-8 hidden md:block">
+        <div class="relative">
+          <input type="text" id="searchInput" 
+                 class="w-full px-5 py-2.5 rounded-full border-0 focus:outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
+                 placeholder="Search phones, furniture, location...">
+          <button class="absolute right-4 top-1/2 -translate-y-1/2 text-green-600">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-5 sm:gap-6">
+        <a href="buyer-messages.html" class="hover:text-yellow-300 transition hidden sm:block" title="Messages"><i class="fa-solid fa-message text-xl"></i></a>
+        <a href="my-orders.html" class="hover:text-yellow-300 transition hidden sm:block" title="My Orders"><i class="fa-solid fa-bag-shopping text-xl"></i></a>
+        
+        <div class="relative hidden sm:block">
+          <button onclick="toggleProfileMenu()" class="flex items-center gap-3 cursor-pointer focus:outline-none hover:opacity-90">
+            <div class="w-9 h-9 bg-white text-green-600 rounded-full flex items-center justify-center font-bold shadow-sm">JM</div>
+          </button>
+          <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl py-2 border border-gray-100 z-50">
+            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 transition"><i class="fa-solid fa-user w-5"></i> Profile</a>
+            <a href="my-orders.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 transition"><i class="fa-solid fa-bag-shopping w-5"></i> My Orders</a>
+            <hr class="my-1 border-gray-100">
+            <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition"><i class="fa-solid fa-right-from-bracket w-5"></i> Logout</button>
+          </div>
+        </div>
+
+        <button id="menuOpenBtn" class="md:hidden text-white focus:outline-none hover:opacity-80 transition active:scale-90">
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="md:hidden bg-green-600 px-4 pb-4 sticky top-[68px] z-40 shadow-sm" id="mobileNav">
+    <div class="relative">
+      <input type="text" id="searchInputMobile" 
+             class="w-full px-5 py-3 rounded-xl border-0 focus:outline-none text-gray-800 placeholder-gray-400 shadow-inner" 
+             placeholder="Search goods, locations...">
+      <button class="absolute right-4 top-1/2 -translate-y-1/2 text-green-600">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 flex gap-8">
+    <div class="hidden md:block w-64 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 h-fit sticky top-24" id="sidebar">
+      <div class="space-y-4">
+        <a href="buyer-dashboard.html" class="flex items-center gap-3 text-green-600 font-bold bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-house w-5"></i> Home</a>
+        <a href="#" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-th-large w-5"></i> Categories</a>
+        <a href="my-orders.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-bag-shopping w-5"></i> My Orders</a>
+        <a href="buyer-messages.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-message w-5"></i> Messages</a>
+      </div>
+    </div>
+
+    <div class="flex-1 min-w-0">
+      <h1 class="text-2xl md:text-3xl font-bold mb-1 text-gray-800">Welcome back, John 👋</h1>
+      <p class="text-gray-500 mb-6 text-sm md:text-base">Discover great deals tailored for you</p>
+
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <select id="categorySelect" class="bg-gray-50 border border-gray-200 text-gray-700 px-3 py-2 rounded-xl focus:outline-none focus:border-green-500 text-sm cursor-pointer flex-1 sm:flex-none">
+            <option value="All">All Categories</option>
+            <option value="Phones">Phones</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Fashion</option>
+          </select>
+
+          <select id="conditionSelect" class="bg-gray-50 border border-gray-200 text-gray-700 px-3 py-2 rounded-xl focus:outline-none focus:border-green-500 text-sm cursor-pointer flex-1 sm:flex-none">
+            <option value="All">New & Used</option>
+            <option value="New">Brand New</option>
+            <option value="Used">Used</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <select id="sortSelect" class="bg-transparent border-0 font-medium text-gray-600 focus:outline-none text-sm cursor-pointer">
+            <option value="relevance">Sort: Latest</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+          </select>
+
+          <div class="flex border border-gray-200 rounded-xl bg-gray-50 overflow-hidden shadow-sm">
+            <button id="viewGridBtn" class="p-2 w-10 h-10 flex items-center justify-center text-white bg-green-600 transition focus:outline-none">
+              <i class="fa-solid fa-table-cells-large text-sm"></i>
+            </button>
+            <button id="viewListBtn" class="p-2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition focus:outline-none">
+              <i class="fa-solid fa-list-ul text-sm"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-sm text-gray-500 mb-4 font-medium"><span id="resultsCount" class="font-bold text-gray-800">0</span> items found</div>
+
+      <div id="loadingFeed" class="flex flex-col items-center justify-center py-16 gap-3">
+        <div class="w-10 h-10 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-400 font-medium text-sm">Retrieving database catalog...</p>
+      </div>
+
+      <div id="emptyFeed" class="hidden flex-col items-center justify-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+        <i class="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-700">No matches found</h3>
+        <p class="text-gray-500 mt-2 text-sm">Try modifying your filters or search terms.</p>
+      </div>
+
+      <div id="catalogFeed" class="hidden"></div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
-    // Configuration constants[span_2](start_span)[span_2](end_span)
-    const AT_USERNAME = "phoenix-newtons";
-    const AT_API_KEY = "atsk_f11a23cdbd597e52595a981c8002711787c1dc9a49b81e95dc1dfebd4b6923a5f1e07a69";
-    const VERIFY_OTP_URL = "https://nzsbvtepxuqheebdwtei.supabase.co/functions/v1/verify-otp";
-
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const loginBtn = document.getElementById('loginBtn');
-      let phone = document.getElementById('phone').value.trim();
-      const countryCode = document.getElementById('countryCode').value;
-
-      // Format phone number: remove leading 0 if present[span_3](start_span)[span_3](end_span)
-      const formattedPhone = countryCode.replace('+', '') + phone.replace(/^0/, '');
-      
-      loginBtn.innerText = "Sending...";
-      loginBtn.disabled = true;
-
-      try {
-        // Step 1: Send SMS via Africa's Talking[span_4](start_span)[span_4](end_span)
-        const response = await fetch('https://api.africastalking.com/version1/messaging', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'apiKey': AT_API_KEY
-          },
-          body: new URLSearchParams({
-            username: AT_USERNAME,
-            to: '+' + formattedPhone,
-            message: `Your E-Buy Uganda verification code is: 123456.`
-          })
-        });
-
-        // Step 2: Request OTP from user[span_5](start_span)[span_5](end_span)
-        const userOtp = prompt("Enter the 6-digit OTP sent to your phone:");
-        if (!userOtp) {
-          loginBtn.innerText = "Send OTP via SMS";
-          loginBtn.disabled = false;
-          return;
-        }
-
-        // Step 3: Verify OTP via Supabase Edge Function[span_6](start_span)[span_6](end_span)
-        const verifyResponse = await fetch(VERIFY_OTP_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: formattedPhone, otp: userOtp })
-        });
-
-        const result = await verifyResponse.json();
-
-        if (result.success) {
-          alert("✅ Login Successful!");
-          window.location.href = "buyer-dashboard.html";
-        } else {
-          alert(result.error || "Invalid OTP. Please try again.");
-          loginBtn.innerText = "Send OTP via SMS";
-          loginBtn.disabled = false;
-        }
-
-      } catch (error) {
-        console.error(error);
-        alert("Something went wrong. Please check your network and try again.");
-        loginBtn.innerText = "Send OTP via SMS";
-        loginBtn.disabled = false;
-      }
+    // --- 1. UI Interactions (Drawer & Dropdown) ---
+    const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+    document.getElementById('menuOpenBtn').addEventListener('click', () => {
+      mobileMenuDrawer.classList.remove('-translate-y-full');
+      document.body.style.overflow = 'hidden';
     });
+    document.getElementById('menuCloseBtn').addEventListener('click', () => {
+      mobileMenuDrawer.classList.add('-translate-y-full');
+      document.body.style.overflow = '';
+    });
+
+    function toggleProfileMenu() {
+      document.getElementById('profileDropdown').classList.toggle('hidden');
+    }
+    window.onclick = function(event) {
+      if (!event.target.closest('.relative')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && !dropdown.classList.contains('hidden')) {
+          dropdown.classList.add('hidden');
+        }
+      }
+    }
+    function logout() {
+      if(confirm("Logout from E-Buy Uganda?")) window.location.href = "login.html";
+    }
+
+    // --- 2. Database Initialization (Acode-Proof) ---
+    if (!window.mySupabase) {
+      window.mySupabase = window.supabase.createClient(
+        'https://nzsbvtepxuqheebdwtei.supabase.co', 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56c2J2dGVweHVxaGVlYmR3dGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjc2NzgsImV4cCI6MjA5NjcwMzY3OH0.WZ5_6yX_pmHpO4DU4rtQpKgFXCSZrhVSi6CzaEYTWus'
+      );
+    }
+
+    let rawInventoryData = [];
+    let activeLayoutFormat = 'grid'; 
+
+    // --- 3. Fetch Data ---
+    async function loadInventoryItems() {
+      try {
+        const { data, error } = await window.mySupabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        rawInventoryData = data || [];
+        processAndRenderCatalog();
+      } catch (err) {
+        console.error("Database error:", err);
+        document.getElementById('loadingFeed').innerHTML = `<p class="text-red-500 font-medium text-sm text-center">Sync broken. Please reload page.</p>`;
+      }
+    }
+
+    // --- 4. Filtering, Sorting & Rendering ---
+    function processAndRenderCatalog() {
+      const loadingFeed = document.getElementById('loadingFeed');
+      const emptyFeed = document.getElementById('emptyFeed');
+      const catalogFeed = document.getElementById('catalogFeed');
+      const resultsCount = document.getElementById('resultsCount');
+
+      loadingFeed.classList.add('hidden');
+
+      // Sync Mobile/Desktop search inputs
+      const searchInputDesktop = document.getElementById('searchInput').value.toLowerCase().trim();
+      const searchInputMobile = document.getElementById('searchInputMobile').value.toLowerCase().trim();
+      const searchWord = searchInputDesktop || searchInputMobile;
+      
+      const conditionFilter = document.getElementById('conditionSelect').value;
+      const sortValue = document.getElementById('sortSelect').value;
+
+      // Filter Logic
+      let runtimeList = rawInventoryData.filter(item => {
+        const textMatch = !searchWord || 
+                          (item.title || '').toLowerCase().includes(searchWord) || 
+                          (item.description || '').toLowerCase().includes(searchWord) || 
+                          (item.location || '').toLowerCase().includes(searchWord);
+
+        let itemCondition = 'Used'; 
+        if ((item.title + ' ' + item.description).toLowerCase().includes('new') || (item.title + ' ' + item.description).toLowerCase().includes('sealed')) {
+          itemCondition = 'New';
+        }
+        const conditionMatch = conditionFilter === 'All' || itemCondition === conditionFilter;
+
+        return textMatch && conditionMatch;
+      });
+
+      // Sorting Logic
+      if (sortValue === 'low-high') runtimeList.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+      else if (sortValue === 'high-low') runtimeList.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+
+      resultsCount.innerText = runtimeList.length;
+
+      if (runtimeList.length === 0) {
+        catalogFeed.classList.add('hidden');
+        emptyFeed.classList.remove('hidden');
+        emptyFeed.style.display = 'flex';
+        return;
+      }
+
+      emptyFeed.classList.add('hidden');
+      emptyFeed.style.display = 'none';
+      catalogFeed.classList.remove('hidden');
+
+      // Apply Layout Classes
+      if (activeLayoutFormat === 'grid') {
+        catalogFeed.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5";
+      } else {
+        catalogFeed.className = "flex flex-col gap-4";
+      }
+
+      catalogFeed.innerHTML = '';
+
+      // Generate HTML Cards
+      runtimeList.forEach(item => {
+        let coverImgSource = 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&auto=format&fit=crop&q=60';
+        try {
+          if (item.image_url) {
+            const parsedArray = JSON.parse(item.image_url);
+            if (Array.isArray(parsedArray) && parsedArray.length > 0) coverImgSource = parsedArray[0];
+          }
+        } catch(e) {
+          if (typeof item.image_url === 'string' && item.image_url.startsWith('http')) coverImgSource = item.image_url;
+        }
+
+        let labelTagText = 'USED';
+        let labelTagColorClass = 'bg-orange-500';
+        if ((item.title + ' ' + item.description).toLowerCase().includes('new') || (item.title + ' ' + item.description).toLowerCase().includes('sealed')) {
+          labelTagText = 'NEW';
+          labelTagColorClass = 'bg-blue-500';
+        }
+
+        const rawPhoneText = (item.whatsapp || '').trim().replace(/^0/, '');
+        const actionWhatsAppLink = `https://wa.me/256${rawPhoneText}?text=${encodeURIComponent(`Hello, I'm interested in buying your item "${item.title}" listed on E-Buy Uganda.`)}`;
+        const formattedPrice = parseFloat(item.price || 0).toLocaleString();
+
+        const card = document.createElement('div');
+
+        if (activeLayoutFormat === 'grid') {
+          // GRID VIEW
+          card.className = "bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col group hover:shadow-xl transition-shadow duration-300";
+          card.innerHTML = `
+            <div class="relative w-full h-48 bg-gray-50 overflow-hidden border-b border-gray-100">
+              <img src="${coverImgSource}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-3 left-3 px-2 py-1 rounded-md text-[10px] text-white font-black tracking-wider shadow-sm ${labelTagColorClass}">${labelTagText}</span>
+              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-gray-700 shadow-sm"><i class="fa-solid fa-truck-fast text-green-600 mr-1"></i>${item.delivery_mode || 'Delivery'}</span>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-gray-800 text-lg line-clamp-1 mb-1">${item.title}</h4>
+                <div class="text-xl font-black text-green-600 mb-2">UGX ${formattedPrice}</div>
+                <p class="text-xs text-gray-500 font-medium flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> ${item.location || 'Uganda'}</p>
+              </div>
+              <div class="mt-4 flex gap-2">
+                <a href="${actionWhatsAppLink}" target="_blank" class="flex-1 bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-sm text-center flex items-center justify-center gap-1.5 transition active:scale-95 hover:bg-emerald-600"><i class="fa-brands fa-whatsapp text-lg"></i> Buy</a>
+                <button class="px-4 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition active:scale-95"><i class="fa-regular fa-heart"></i></button>
+              </div>
+            </div>
+          `;
+        } else {
+          // LIST VIEW
+          card.className = "bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4 flex gap-4 relative hover:shadow-md transition-shadow";
+          card.innerHTML = `
+            <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
+              <img src="${coverImgSource}" class="w-full h-full object-cover">
+              <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[9px] text-white font-black tracking-wider shadow-sm ${labelTagColorClass}">${labelTagText}</span>
+            </div>
+            <div class="flex-1 flex flex-col justify-between py-1 min-w-0">
+              <div>
+                <h4 class="font-bold text-gray-900 text-base sm:text-lg line-clamp-1 sm:line-clamp-2">${item.title}</h4>
+                <div class="text-lg sm:text-xl font-black text-green-600 mt-0.5 mb-1.5">UGX ${formattedPrice}</div>
+                <p class="text-xs text-gray-500 font-medium flex items-center gap-1"><i class="fa-solid fa-location-dot text-gray-400"></i> <span class="truncate">${item.location || 'Kampala'}</span></p>
+              </div>
+              <div class="flex justify-between items-center mt-2">
+                <span class="hidden sm:inline-block text-[10px] font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-600 border border-gray-200"><i class="fa-solid fa-truck-fast text-green-600 mr-1"></i>${item.delivery_mode || 'Delivery'}</span>
+                <div class="flex gap-2 w-full sm:w-auto">
+                  <button class="px-3 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-50 transition"><i class="fa-regular fa-heart"></i></button>
+                  <a href="${actionWhatsAppLink}" target="_blank" class="flex-1 sm:flex-none bg-emerald-500 text-white font-bold px-5 py-2 rounded-xl text-sm flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm hover:bg-emerald-600"><i class="fa-brands fa-whatsapp"></i> Buy</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        catalogFeed.appendChild(card);
+      });
+    }
+
+    // --- 5. Event Listeners ---
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      document.getElementById('searchInputMobile').value = e.target.value;
+      processAndRenderCatalog();
+    });
+    document.getElementById('searchInputMobile').addEventListener('input', (e) => {
+      document.getElementById('searchInput').value = e.target.value;
+      processAndRenderCatalog();
+    });
+    
+    document.getElementById('categorySelect').addEventListener('change', processAndRenderCatalog);
+    document.getElementById('conditionSelect').addEventListener('change', processAndRenderCatalog);
+    document.getElementById('sortSelect').addEventListener('change', processAndRenderCatalog);
+
+    document.getElementById('viewGridBtn').addEventListener('click', () => {
+      activeLayoutFormat = 'grid';
+      document.getElementById('viewGridBtn').className = "p-2 w-10 h-10 flex items-center justify-center text-white bg-green-600 transition focus:outline-none";
+      document.getElementById('viewListBtn').className = "p-2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition focus:outline-none";
+      processAndRenderCatalog();
+    });
+
+    document.getElementById('viewListBtn').addEventListener('click', () => {
+      activeLayoutFormat = 'list';
+      document.getElementById('viewListBtn').className = "p-2 w-10 h-10 flex items-center justify-center text-white bg-green-600 transition focus:outline-none";
+      document.getElementById('viewGridBtn').className = "p-2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition focus:outline-none";
+      processAndRenderCatalog();
+    });
+
+    // Run Initial Load
+    window.addEventListener('DOMContentLoaded', loadInventoryItems);
   </script>
 </body>
 </html>
