@@ -11,20 +11,6 @@
     console.warn = function() {};
   </script>
 </head>
-  <nav class="bg-green-600 dark:bg-gray-900 text-white py-4 sticky top-0 z-50 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <i class="fa-solid fa-store text-3xl"></i>
-      <h1 class="text-2xl font-bold">E-Buy Uganda</h1>
-    </div>
-
-    <!-- Dark Mode Toggle -->
-    <button onclick="toggleDarkMode()" 
-            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition">
-      <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
-    </button>
-  </div>
-</nav>
 <body class="bg-gray-50 font-sans">
 
   <!-- Navbar -->
@@ -49,6 +35,7 @@
         <span class="bg-amber-100 text-amber-700 text-sm px-4 py-2 rounded-2xl font-medium">Temporary Seller • Pay After Sale</span>
       </div>
 
+      <!-- FIXED FORM TAG -->
       <form id="addProductForm" class="space-y-8">
         
         <!-- Product Images -->
@@ -56,12 +43,13 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">Product Images <span class="text-red-500">*</span></label>
           <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-green-500 transition">
             <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
-            <p class="text-gray-600">Click to upload images (max 5)</p>
-            <input type="file" id="images" multiple accept="image/*" class="hidden">
-            <button type="button" onclick="document.getElementById('images').click()" 
-                    class="mt-4 px-6 py-2 bg-green-600 text-white rounded-2xl hover:bg-green-700">
-              Choose Images
-            </button>
+            <p class="text-gray-600 mb-2">Click to upload images (max 5)</p>
+            <!-- Made the input visible but styled to fit your theme so users can see selected files -->
+            <input type="file" id="images" multiple accept="image/*" required
+                   class="block w-full text-sm text-gray-500 mx-auto
+                          file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 
+                          file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 
+                          hover:file:bg-green-100 cursor-pointer">
           </div>
         </div>
 
@@ -101,7 +89,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp Number</label>
           <div class="flex gap-3">
-            <input type="tel" value="+256" class="w-28 px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500">
+            <input type="tel" value="+256" disabled class="w-28 px-5 py-4 border border-gray-300 rounded-2xl bg-gray-100 text-gray-600">
             <input type="tel" id="whatsapp" required 
                    class="flex-1 px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-green-500" 
                    placeholder="700 123 456">
@@ -133,7 +121,7 @@
           <p class="text-amber-700">This listing is <strong>free</strong>. You only pay the service fee after the item is successfully sold and payment verified via MTN or Airtel.</p>
         </div>
 
-        <button type="submit" 
+        <button type="submit" id="submitBtn"
                 class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-5 rounded-3xl text-lg transition">
           Publish Listing Now
         </button>
@@ -141,19 +129,107 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    document.getElementById('addProductForm').addEventListener('submit', function(e) {
+    // 1. Acode-proof initialization
+    if (!window.mySupabase) {
+      window.mySupabase = supabase.createClient(
+        'https://nzsbvtepxuqheebdwtei.supabase.co', 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56c2J2dGVweHVxaGVlYmR3dGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjc2NzgsImV4cCI6MjA5NjcwMzY3OH0.WZ5_6yX_pmHpO4DU4rtQpKgFXCSZrhVSi6CzaEYTWus'
+      );
+    }
+
+    document.getElementById('addProductForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const title = document.getElementById('title').value;
-      const price = document.getElementById('price').value;
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerText = "Uploading Images... Please wait";
+      submitBtn.disabled = true;
+
+      // 2. Check for logged-in user
+      const { data: { user }, error: authError } = await window.mySupabase.auth.getUser();
       
-      alert(`✅ Product Listed Successfully!\n\nTitle: ${title}\nPrice: UGX ${price}\n\nYour item is now visible to buyers.\n\nTemporary sellers pay only after sale.`);
+      if (authError || !user) {
+        alert("Please log in to add a product.");
+        submitBtn.innerText = "Publish Listing Now";
+        submitBtn.disabled = false;
+        return;
+      }
+
+      // 3. Handle Images
+      const fileInput = document.getElementById('images');
+      const files = fileInput.files;
+
+      if (files.length === 0) {
+        alert("Please select at least one image.");
+        submitBtn.innerText = "Publish Listing Now";
+        submitBtn.disabled = false;
+        return;
+      }
+
+      if (files.length > 5) {
+        alert("❌ You can only upload a maximum of 5 images.");
+        submitBtn.innerText = "Publish Listing Now";
+        submitBtn.disabled = false;
+        return;
+      }
+
+      let uploadedImageUrls = [];
+
+      // Loop through and upload each file to Supabase Storage
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileName = `products/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+
+        const { data: uploadData, error: uploadError } = await window.mySupabase.storage
+          .from('product-images')
+          .upload(fileName, file);
+
+        if (uploadError) {
+          alert("Image upload failed: " + uploadError.message);
+          submitBtn.innerText = "Publish Listing Now";
+          submitBtn.disabled = false;
+          return;
+        }
+
+        // Get the public URL for the uploaded image
+        const { data: urlData } = window.mySupabase.storage
+          .from('product-images')
+          .getPublicUrl(uploadData.path);
+        
+        uploadedImageUrls.push(urlData.publicUrl);
+      }
+
+      submitBtn.innerText = "Saving to Database...";
+
+      // 4. Collect all form data
+      // Added whatsapp and delivery logic to match your HTML
+      const deliveryMode = document.querySelector('input[name="delivery"]:checked').value;
       
-      // Redirect back to dashboard
-      setTimeout(() => {
-        window.location.href = 'temporary-trader-dashboard.html';
-      }, 1500);
+      const productData = {
+        title: document.getElementById('title').value,
+        price: parseFloat(document.getElementById('price').value),
+        description: document.getElementById('description').value,
+        location: document.getElementById('location').value,
+        whatsapp: document.getElementById('whatsapp').value,
+        delivery_mode: deliveryMode,
+        image_url: JSON.stringify(uploadedImageUrls), // Saves array of URLs as text
+        user_id: user.id
+      };
+
+      // 5. Save to database
+      const { data, error } = await window.mySupabase
+        .from('products')
+        .insert([productData]);
+
+      if (error) {
+        alert("Database error: " + error.message);
+        submitBtn.innerText = "Publish Listing Now";
+        submitBtn.disabled = false;
+      } else {
+        alert("✅ Product Listed Successfully!");
+        window.location.href = 'trader-dashboard.html'; 
+      }
     });
   </script>
 </body>
