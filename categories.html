@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - E-Buy Uganda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>console.warn = function() {};</script>
+</head>
+<body class="bg-gray-50 font-sans overflow-x-hidden min-h-screen">
+
+  <!-- Mobile Navigation Menu Overlay Drawer -->
+  <div id="mobileMenuDrawer" class="fixed inset-0 bg-green-700 z-[100] transform -translate-y-full transition-transform duration-300 ease-in-out flex flex-col md:hidden">
+    <div class="flex justify-between items-center px-4 py-4 bg-green-800">
+      <div class="flex items-center gap-3 text-white">
+        <i class="fa-solid fa-store text-2xl"></i>
+        <h1 class="text-2xl font-bold tracking-tight">E-Buy Uganda</h1>
+      </div>
+      <button id="menuCloseBtn" class="text-white hover:text-gray-200 focus:outline-none transition-transform active:scale-90">
+        <i class="fa-solid fa-xmark text-3xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer Links -->
+    <div class="flex flex-col px-6 py-8 space-y-6 text-white text-lg font-bold tracking-wide">
+      <a href="buyer-dashboard.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-house w-8"></i> Home</a>
+      <a href="categories.html" class="text-yellow-300 transition-colors"><i class="fa-solid fa-th-large w-8"></i> Categories</a>
+      <a href="my-orders.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-bag-shopping w-8"></i> My Orders</a>
+      <a href="buyer-messages.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-message w-8"></i> Messages</a>
+      <a href="profile.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-user w-8"></i> Profile</a>
+      <hr class="border-green-600">
+      <button onclick="logout()" class="text-left text-red-300 hover:text-red-100 transition-colors"><i class="fa-solid fa-right-from-bracket w-8"></i> Logout</button>
+    </div>
+  </div>
+
+  <!-- Top Navbar -->
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50 shadow-sm" id="mainNav">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-store text-3xl"></i>
+        <h1 class="text-2xl font-bold hidden sm:block">E-Buy Uganda</h1>
+      </div>
+      
+      <!-- Central Empty Space for alignment -->
+      <div class="flex-1 max-w-xl mx-8 hidden md:block"></div>
+
+      <!-- Right Action Icons -->
+      <div class="flex items-center gap-5 sm:gap-6">
+        <a href="buyer-dashboard.html" class="hover:text-yellow-300 transition hidden sm:block" title="Home"><i class="fa-solid fa-house text-xl"></i></a>
+        <a href="buyer-messages.html" class="hover:text-yellow-300 transition hidden sm:block" title="Messages"><i class="fa-solid fa-message text-xl"></i></a>
+        <a href="my-orders.html" class="hover:text-yellow-300 transition hidden sm:block" title="My Orders"><i class="fa-solid fa-bag-shopping text-xl"></i></a>
+        
+        <!-- Profile Dropdown (Desktop) -->
+        <div class="relative hidden sm:block">
+          <button onclick="toggleProfileMenu()" class="flex items-center gap-3 cursor-pointer focus:outline-none hover:opacity-90">
+            <div class="w-9 h-9 bg-white text-green-600 rounded-full flex items-center justify-center font-bold shadow-sm ring-2 ring-transparent hover:ring-yellow-300 transition-all">JM</div>
+          </button>
+          <!-- Dropdown -->
+          <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl py-2 border border-gray-100 z-50">
+            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 transition"><i class="fa-solid fa-user w-5"></i> Profile</a>
+            <a href="my-orders.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 transition"><i class="fa-solid fa-bag-shopping w-5"></i> My Orders</a>
+            <hr class="my-1 border-gray-100">
+            <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition"><i class="fa-solid fa-right-from-bracket w-5"></i> Logout</button>
+          </div>
+        </div>
+
+        <!-- Hamburger Icon (Mobile) -->
+        <button id="menuOpenBtn" class="md:hidden text-white focus:outline-none hover:opacity-80 transition active:scale-90">
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 flex gap-8">
+    <!-- Desktop Sidebar -->
+    <div class="hidden md:block w-64 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 h-fit sticky top-24" id="sidebar">
+      <div class="space-y-4">
+        <a href="buyer-dashboard.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-house w-5"></i> Home</a>
+        <a href="categories.html" class="flex items-center gap-3 text-green-600 font-bold bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-th-large w-5"></i> Categories</a>
+        <a href="my-orders.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-bag-shopping w-5"></i> My Orders</a>
+        <a href="buyer-messages.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-message w-5"></i> Messages</a>
+        <hr class="border-gray-100 my-2">
+        <a href="profile.html" class="flex items-center gap-3 text-gray-600 hover:text-green-600 hover:bg-green-50 px-4 py-3 rounded-2xl transition"><i class="fa-solid fa-user w-5"></i> My Profile</a>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 min-w-0">
+      <h1 class="text-2xl md:text-3xl font-bold mb-2 text-gray-800">Browse Categories</h1>
+      <p class="text-gray-500 mb-8 text-sm md:text-base">Find exactly what you are looking for by shopping through our departments.</p>
+
+      <!-- Categories Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        
+        <!-- Category Card 1 -->
+        <a href="buyer-dashboard.html?category=Phones" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Phones & Tablets</h3>
+          <p class="text-xs text-gray-400 mt-1">1,240+ items</p>
+        </a>
+
+        <!-- Category Card 2 -->
+        <a href="buyer-dashboard.html?category=Electronics" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center text-2xl mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Electronics</h3>
+          <p class="text-xs text-gray-400 mt-1">850+ items</p>
+        </a>
+
+        <!-- Category Card 3 -->
+        <a href="buyer-dashboard.html?category=Vehicles" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-2xl mb-4 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-car"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Vehicles</h3>
+          <p class="text-xs text-gray-400 mt-1">320+ items</p>
+        </a>
+
+        <!-- Category Card 4 -->
+        <a href="buyer-dashboard.html?category=Fashion" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-pink-50 text-pink-500 flex items-center justify-center text-2xl mb-4 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Fashion</h3>
+          <p class="text-xs text-gray-400 mt-1">2,100+ items</p>
+        </a>
+
+        <!-- Category Card 5 -->
+        <a href="buyer-dashboard.html?category=RealEstate" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-house-flag"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Real Estate</h3>
+          <p class="text-xs text-gray-400 mt-1">150+ listings</p>
+        </a>
+
+        <!-- Category Card 6 -->
+        <a href="buyer-dashboard.html?category=Furniture" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-couch"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Home & Furniture</h3>
+          <p class="text-xs text-gray-400 mt-1">430+ items</p>
+        </a>
+
+        <!-- Category Card 7 -->
+        <a href="buyer-dashboard.html?category=Agriculture" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-lime-50 text-lime-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-lime-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-wheat-awn"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Agriculture</h3>
+          <p class="text-xs text-gray-400 mt-1">280+ items</p>
+        </a>
+
+        <!-- Category Card 8 -->
+        <a href="buyer-dashboard.html?category=Services" class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer">
+          <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <h3 class="font-bold text-gray-800">Jobs & Services</h3>
+          <p class="text-xs text-gray-400 mt-1">95+ items</p>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- UI Interactions (Drawer & Dropdown) ---
+    const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+    document.getElementById('menuOpenBtn').addEventListener('click', () => {
+      mobileMenuDrawer.classList.remove('-translate-y-full');
+      document.body.style.overflow = 'hidden';
+    });
+    document.getElementById('menuCloseBtn').addEventListener('click', () => {
+      mobileMenuDrawer.classList.add('-translate-y-full');
+      document.body.style.overflow = '';
+    });
+
+    function toggleProfileMenu() {
+      document.getElementById('profileDropdown').classList.toggle('hidden');
+    }
+
+    // Close dropdown when clicking outside
+    window.onclick = function(event) {
+      if (!event.target.closest('.relative')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && !dropdown.classList.contains('hidden')) {
+          dropdown.classList.add('hidden');
+        }
+      }
+    }
+
+    function logout() {
+      if(confirm("Are you sure you want to log out?")) {
+        window.location.href = "login.html";
+      }
+    }
+  </script>
+</body>
+</html>
