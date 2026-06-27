@@ -10,6 +10,7 @@
 </head>
 <body class="bg-gray-50 font-sans min-h-screen text-gray-800 overflow-x-hidden">
 
+  <!-- Mobile Navigation Menu Overlay Drawer -->
   <div id="mobileMenuDrawer" class="fixed inset-0 bg-green-700 z-[100] transform -translate-y-full transition-transform duration-300 ease-in-out flex flex-col md:hidden">
     <div class="flex justify-between items-center px-4 py-4 bg-green-800">
       <div class="flex items-center gap-3 text-white">
@@ -21,6 +22,7 @@
       </button>
     </div>
 
+    <!-- Mobile Drawer Links -->
     <div class="flex flex-col px-6 py-8 space-y-6 text-white text-lg font-bold tracking-wide">
       <a href="index.html" class="text-yellow-300 transition-colors"><i class="fa-solid fa-house w-8"></i> Home</a>
       <a href="categories.html" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-th-large w-8"></i> Categories</a>
@@ -34,17 +36,20 @@
     </div>
   </div>
 
+  <!-- Top Navbar -->
   <nav class="bg-green-600 text-white py-4 sticky top-0 z-50 shadow-sm border-b border-green-500">
     <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
       
+      <!-- Brand Logo -->
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-store text-2xl md:text-3xl"></i>
         <h1 class="text-2xl font-bold tracking-tight">E-Buy Uganda</h1>
       </div>
       
+      <!-- Desktop Actions (Hidden on Mobile) -->
       <div class="hidden md:flex items-center gap-6">
         <a href="index.html" class="text-yellow-300 font-semibold hover:text-white transition">Home</a>
-        <a href="#" class="text-white hover:text-yellow-300 font-semibold transition">Categories</a>
+        <a href="categories.html" class="text-white hover:text-yellow-300 font-semibold transition">Categories</a>
         <div class="h-6 w-px bg-green-500 mx-2"></div>
         <a href="login.html" class="text-white font-bold hover:text-yellow-300 transition">Login</a>
         <a href="login.html" class="bg-yellow-400 text-green-900 font-bold px-6 py-2.5 rounded-full hover:bg-yellow-300 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
@@ -52,12 +57,14 @@
         </a>
       </div>
 
+      <!-- Hamburger Icon (Mobile Only) -->
       <button id="menuOpenBtn" class="md:hidden text-white focus:outline-none hover:opacity-80 transition active:scale-90">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </div>
   </nav>
 
+  <!-- Green Search Module Hero Banner -->
   <div class="bg-green-600 text-white pb-10 pt-6 px-4 shadow-md">
     <div class="max-w-7xl mx-auto">
       
@@ -66,8 +73,10 @@
         <p class="text-green-100 text-sm md:text-lg">Shop electronics, fashion, vehicles, and more across Uganda.</p>
       </div>
       
+      <!-- Responsive Filter Layout: Stacks on mobile, inline on desktop -->
       <div class="flex flex-col md:flex-row gap-3 md:gap-4 items-center w-full bg-green-700/50 p-2 md:p-3 rounded-2xl md:rounded-full shadow-inner border border-green-500/30">
         
+        <!-- Main Search Bar -->
         <div class="relative w-full md:flex-1">
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -78,6 +87,7 @@
         </div>
 
         <div class="flex gap-3 w-full md:w-auto">
+          <!-- Categories Dropdown -->
           <div class="relative flex-1 md:w-48">
             <select id="categorySelect" 
                     class="w-full bg-white appearance-none text-gray-700 px-4 py-3 md:py-3.5 rounded-xl md:rounded-full focus:outline-none shadow-sm cursor-pointer text-sm md:text-base font-medium">
@@ -92,6 +102,7 @@
             </span>
           </div>
 
+          <!-- Condition Dropdown -->
           <div class="relative flex-1 md:w-40">
             <select id="conditionSelect" 
                     class="w-full bg-white appearance-none text-gray-700 px-4 py-3 md:py-3.5 rounded-xl md:rounded-full focus:outline-none shadow-sm cursor-pointer text-sm md:text-base font-medium">
@@ -109,14 +120,17 @@
     </div>
   </div>
 
+  <!-- Content Results Section -->
   <main class="max-w-7xl mx-auto px-4 py-8 md:py-12">
     
+    <!-- Top Result Controls Bar -->
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
       <div class="text-gray-600 font-medium">
         <span id="resultsCount" class="font-extrabold text-gray-900 text-lg md:text-xl">0</span> items found
       </div>
       
       <div class="flex items-center gap-3 self-end sm:self-auto">
+        <!-- Sort Control -->
         <div class="relative bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm text-sm">
           <select id="sortSelect" class="bg-transparent appearance-none pr-6 focus:outline-none font-medium text-gray-700 cursor-pointer">
             <option value="relevance">Sort: Latest</option>
@@ -128,6 +142,7 @@
           </span>
         </div>
 
+        <!-- View Mode Toggles -->
         <div class="flex border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm">
           <button id="viewGridBtn" class="p-2.5 w-11 text-white bg-green-600 transition focus:outline-none border-r border-gray-100 flex justify-center items-center">
             <i class="fa-solid fa-table-cells-large text-sm"></i>
@@ -139,21 +154,25 @@
       </div>
     </div>
 
+    <!-- Loading State -->
     <div id="loadingFeed" class="flex flex-col items-center justify-center py-20 gap-4">
       <div class="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
       <p class="text-gray-500 font-medium text-lg">Loading catalog...</p>
     </div>
 
+    <!-- Empty State -->
     <div id="emptyFeed" class="hidden flex-col items-center justify-center py-24 bg-white rounded-3xl border border-gray-100 shadow-sm">
       <i class="fa-solid fa-box-open text-7xl text-gray-200 mb-5"></i>
       <h3 class="text-2xl font-bold text-gray-800 mb-2">No matches found</h3>
       <p class="text-gray-500">Try adjusting your filters or search terms.</p>
     </div>
 
+    <!-- Product Feed (Adapts to Grid/List automatically) -->
     <div id="catalogFeed" class="hidden"></div>
 
   </main>
 
+  <!-- External Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
@@ -253,7 +272,6 @@
 
       // Responsive Grid vs List container classes
       if (activeLayoutFormat === 'grid') {
-        // Desktop uses 4 or 5 columns depending on screen size. Mobile uses 2.
         catalogFeed.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6";
       } else {
         catalogFeed.className = "flex flex-col gap-4";
