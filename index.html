@@ -3,23 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Buy Uganda - Browse Goods</title>
+  <title>E-Buy Uganda - Browse All Goods</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script>
-    // Suppress Tailwind warnings in development console environment
-    console.warn = function() {};
-  </script>
+  <script>console.warn = function() {};</script>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen text-gray-800 overflow-x-hidden">
+<body class="bg-gray-50 font-sans min-h-screen text-gray-800 overflow-x-hidden">
 
-  <!-- Mobile Navigation Menu Overlay Drawer -->
-  <div id="mobileMenuDrawer" class="fixed inset-0 bg-[#168838] z-[100] transform -translate-y-full transition-transform duration-300 ease-in-out flex flex-col">
-    
-    <!-- Drawer Header Menu Top Bar -->
-    <div class="flex justify-between items-center px-4 py-4 bg-[#147a32]">
+  <div id="mobileMenuDrawer" class="fixed inset-0 bg-green-700 z-[100] transform -translate-y-full transition-transform duration-300 ease-in-out flex flex-col md:hidden">
+    <div class="flex justify-between items-center px-4 py-4 bg-green-800">
       <div class="flex items-center gap-3 text-white">
-        <i class="fa-solid fa-shop text-2xl"></i>
+        <i class="fa-solid fa-store text-2xl"></i>
         <h1 class="text-2xl font-bold tracking-tight">E-Buy Uganda</h1>
       </div>
       <button id="menuCloseBtn" class="text-white hover:text-gray-200 focus:outline-none transition-transform active:scale-90">
@@ -27,107 +21,105 @@
       </button>
     </div>
 
-    <!-- Interactive Navigation Text Links -->
-    <div class="flex flex-col px-4 py-6 space-y-6 text-white text-lg font-bold tracking-wide">
-      <a href="index.html" class="hover:text-green-200 transition-colors">Home</a>
-      <a href="#" class="hover:text-green-200 transition-colors">Search</a>
-      <a href="login.html" class="hover:text-green-200 transition-colors">Login</a>
-    </div>
-
-    <!-- Primary User Pathway Action Call-to-Action Buttons -->
-    <div class="px-4 space-y-4">
-      <a href="#" class="block w-full bg-white text-[#168838] font-bold text-center py-3.5 rounded-xl text-lg hover:bg-gray-100 transition shadow-sm active:scale-95">
-        Buyer
+    <div class="flex flex-col px-6 py-8 space-y-6 text-white text-lg font-bold tracking-wide">
+      <a href="index.html" class="text-yellow-300 transition-colors"><i class="fa-solid fa-house w-8"></i> Home</a>
+      <a href="#" class="hover:text-green-200 transition-colors"><i class="fa-solid fa-th-large w-8"></i> Categories</a>
+      <hr class="border-green-600 my-2">
+      <a href="login.html" class="block w-full bg-white text-green-700 font-bold text-center py-3.5 rounded-xl text-lg hover:bg-gray-100 transition shadow-sm">
+        Login / Register
       </a>
-      <a href="trader-dashboard.html" class="block w-full bg-yellow-400 text-green-900 font-bold text-center py-3.5 rounded-xl text-lg hover:bg-yellow-500 transition shadow-sm active:scale-95">
-        Seller
+      <a href="login.html" class="block w-full bg-yellow-400 text-green-900 font-bold text-center py-3.5 rounded-xl text-lg hover:bg-yellow-500 transition shadow-sm">
+        Start Selling
       </a>
     </div>
   </div>
 
-  <!-- Main Top Bar Header Navigation -->
-  <nav class="bg-green-600 text-white py-4 px-4 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-md mx-auto flex justify-between items-center">
+  <nav class="bg-green-600 text-white py-4 sticky top-0 z-50 shadow-sm border-b border-green-500">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-shop text-2xl"></i>
+        <i class="fa-solid fa-store text-2xl md:text-3xl"></i>
         <h1 class="text-2xl font-bold tracking-tight">E-Buy Uganda</h1>
       </div>
-      <div class="flex items-center gap-4">
-        <!-- Replaced standalone gauge icon with functional hamburger trigger -->
-        <button id="menuOpenBtn" class="text-white focus:outline-none hover:opacity-80 transition active:scale-90">
-          <i class="fa-solid fa-bars text-2xl"></i>
-        </button>
+      
+      <div class="hidden md:flex items-center gap-6">
+        <a href="index.html" class="text-yellow-300 font-semibold hover:text-white transition">Home</a>
+        <a href="#" class="text-white hover:text-yellow-300 font-semibold transition">Categories</a>
+        <div class="h-6 w-px bg-green-500 mx-2"></div>
+        <a href="login.html" class="text-white font-bold hover:text-yellow-300 transition">Login</a>
+        <a href="login.html" class="bg-yellow-400 text-green-900 font-bold px-6 py-2.5 rounded-full hover:bg-yellow-300 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+          Start Selling
+        </a>
       </div>
+
+      <button id="menuOpenBtn" class="md:hidden text-white focus:outline-none hover:opacity-80 transition active:scale-90">
+        <i class="fa-solid fa-bars text-2xl"></i>
+      </button>
     </div>
   </nav>
 
-  <!-- Green Search Module Hero Banner Container Area -->
-  <div class="bg-green-600 text-white pb-8 pt-4 px-4 shadow-md">
-    <div class="max-w-md mx-auto space-y-4">
+  <div class="bg-green-600 text-white pb-10 pt-6 px-4 shadow-md">
+    <div class="max-w-7xl mx-auto">
       
-      <!-- Section Screen Heading Title Text -->
-      <h2 class="text-2xl font-bold tracking-wide mb-2">Browse All Goods</h2>
-      
-      <!-- Primary Text Phrase Input Filtering Element Box -->
-      <div class="relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </span>
-        <input type="text" id="keywordSearch" 
-               class="w-full pl-11 pr-4 py-3.5 rounded-2xl text-gray-800 focus:outline-none shadow-inner text-base" 
-               placeholder="Search goods, traders, categories..">
-      </div>
-
-      <!-- Functional Select Box Filter Group: Categories Option Elements -->
-      <div class="relative">
-        <select id="categorySelect" 
-                class="w-full bg-white appearance-none text-gray-700 px-5 py-3.5 rounded-2xl focus:outline-none shadow-sm cursor-pointer text-base">
-          <option value="All">All Categories</option>
-          <option value="Phones">Phones & Accessories</option>
-          <option value="Electronics">Electronics & Appliances</option>
-          <option value="Fashion">Fashion & Clothes</option>
-        </select>
-        <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-500">
-          <i class="fa-solid fa-chevron-down text-sm"></i>
-        </span>
-      </div>
-
-      <!-- Functional Select Box Filter Group: Product Conditions Option Elements -->
-      <div class="relative">
-        <select id="conditionSelect" 
-                class="w-full bg-white appearance-none text-gray-700 px-5 py-3.5 rounded-2xl focus:outline-none shadow-sm cursor-pointer text-base">
-          <option value="All">New & Used</option>
-          <option value="New">Brand New</option>
-          <option value="Used">Used Items</option>
-        </select>
-        <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-500">
-          <i class="fa-solid fa-chevron-down text-sm"></i>
-        </span>
-      </div>
-
-      <!-- Quick Action Search Button Trigger Interface Link -->
-      <div class="flex items-center gap-2 pt-1 text-white opacity-95 font-medium cursor-pointer max-w-max hover:opacity-100 transition">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <span class="text-base tracking-wide font-semibold">Search</span>
+      <div class="text-center md:text-left mb-6">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide mb-2 md:mb-4">Discover Great Deals.</h2>
+        <p class="text-green-100 text-sm md:text-lg">Shop electronics, fashion, vehicles, and more across Uganda.</p>
       </div>
       
+      <div class="flex flex-col md:flex-row gap-3 md:gap-4 items-center w-full bg-green-700/50 p-2 md:p-3 rounded-2xl md:rounded-full shadow-inner border border-green-500/30">
+        
+        <div class="relative w-full md:flex-1">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input type="text" id="keywordSearch" 
+                 class="w-full pl-11 pr-4 py-3 md:py-3.5 rounded-xl md:rounded-full text-gray-800 focus:outline-none shadow-sm text-base placeholder-gray-400" 
+                 placeholder="Search goods, locations, brands...">
+        </div>
+
+        <div class="flex gap-3 w-full md:w-auto">
+          <div class="relative flex-1 md:w-48">
+            <select id="categorySelect" 
+                    class="w-full bg-white appearance-none text-gray-700 px-4 py-3 md:py-3.5 rounded-xl md:rounded-full focus:outline-none shadow-sm cursor-pointer text-sm md:text-base font-medium">
+              <option value="All">All Categories</option>
+              <option value="Phones">Phones</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Vehicles">Vehicles</option>
+            </select>
+            <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </span>
+          </div>
+
+          <div class="relative flex-1 md:w-40">
+            <select id="conditionSelect" 
+                    class="w-full bg-white appearance-none text-gray-700 px-4 py-3 md:py-3.5 rounded-xl md:rounded-full focus:outline-none shadow-sm cursor-pointer text-sm md:text-base font-medium">
+              <option value="All">Condition</option>
+              <option value="New">Brand New</option>
+              <option value="Used">Used Items</option>
+            </select>
+            <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <!-- Content Results Control Section View Wrapper Block -->
-  <main class="max-w-md mx-auto px-4 py-6">
+  <main class="max-w-7xl mx-auto px-4 py-8 md:py-12">
     
-    <!-- Top Result Controls Bar: Dynamic Item Count and View Mode Toggles -->
-    <div class="flex justify-between items-center mb-6">
-      <div class="text-gray-600 text-sm font-medium">
-        <span id="resultsCount" class="font-extrabold text-gray-900 text-base">0</span> goods found
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+      <div class="text-gray-600 font-medium">
+        <span id="resultsCount" class="font-extrabold text-gray-900 text-lg md:text-xl">0</span> items found
       </div>
       
-      <div class="flex items-center gap-3">
-        <!-- Sort Control Dropdown Selection Selection Box Element -->
-        <div class="relative bg-white border border-gray-200 rounded-xl px-3 py-1.5 shadow-sm text-xs">
-          <select id="sortSelect" class="bg-transparent appearance-none pr-5 focus:outline-none font-medium text-gray-700 cursor-pointer">
-            <option value="relevance">Sort: Relevance</option>
+      <div class="flex items-center gap-3 self-end sm:self-auto">
+        <div class="relative bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm text-sm">
+          <select id="sortSelect" class="bg-transparent appearance-none pr-6 focus:outline-none font-medium text-gray-700 cursor-pointer">
+            <option value="relevance">Sort: Latest</option>
             <option value="low-high">Price: Low to High</option>
             <option value="high-low">Price: High to Low</option>
           </select>
@@ -136,73 +128,58 @@
           </span>
         </div>
 
-        <!-- View Display Mode Toggle Switch Button Blocks -->
-        <div class="flex border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm text-xs">
-          <button id="viewGridBtn" class="p-2 text-gray-400 hover:text-gray-600 transition focus:outline-none border-r border-gray-100">
+        <div class="flex border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm">
+          <button id="viewGridBtn" class="p-2.5 w-11 text-white bg-green-600 transition focus:outline-none border-r border-gray-100 flex justify-center items-center">
             <i class="fa-solid fa-table-cells-large text-sm"></i>
           </button>
-          <button id="viewListBtn" class="p-2 text-white bg-green-600 transition focus:outline-none">
+          <button id="viewListBtn" class="p-2.5 w-11 text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition focus:outline-none flex justify-center items-center">
             <i class="fa-solid fa-list-ul text-sm"></i>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Active Feed Layout Loading Spinner State Component -->
-    <div id="loadingFeed" class="flex flex-col items-center justify-center py-16 gap-3">
-      <div class="w-9 h-9 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-gray-400 text-xs font-medium">Retrieving catalog records...</p>
+    <div id="loadingFeed" class="flex flex-col items-center justify-center py-20 gap-4">
+      <div class="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-gray-500 font-medium text-lg">Loading catalog...</p>
     </div>
 
-    <!-- Empty Dataset Fallback Alert Message Element Container -->
-    <div id="emptyFeed" class="hidden text-center py-16 bg-white rounded-2xl border p-6">
-      <i class="fa-solid fa-box-open text-5xl text-gray-300 mb-3"></i>
-      <h3 class="text-lg font-bold text-gray-700 mb-1">No matches found</h3>
-      <p class="text-sm text-gray-400">Try modifying your filter settings or search terms.</p>
+    <div id="emptyFeed" class="hidden flex-col items-center justify-center py-24 bg-white rounded-3xl border border-gray-100 shadow-sm">
+      <i class="fa-solid fa-box-open text-7xl text-gray-200 mb-5"></i>
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">No matches found</h3>
+      <p class="text-gray-500">Try adjusting your filters or search terms.</p>
     </div>
 
-    <!-- Interactive Data Content Output Display Feed Grid/List Area -->
-    <div id="catalogFeed" class="space-y-4 hidden">
-      <!-- Items will be created and displayed here dynamically by JavaScript -->
-    </div>
+    <div id="catalogFeed" class="hidden"></div>
 
   </main>
 
-  <!-- External Client Library SDK Script Dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
-    // 1. Mobile Menu Overlay Logic Hooks
+    // 1. Mobile Menu Logic
     const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
-    const menuOpenBtn = document.getElementById('menuOpenBtn');
-    const menuCloseBtn = document.getElementById('menuCloseBtn');
-
-    // Trigger animation to slide menu down into view
-    menuOpenBtn.addEventListener('click', () => {
+    document.getElementById('menuOpenBtn').addEventListener('click', () => {
       mobileMenuDrawer.classList.remove('-translate-y-full');
-      document.body.style.overflow = 'hidden'; // Prevent background scrolling when menu is open
+      document.body.style.overflow = 'hidden'; 
     });
-
-    // Trigger animation to slide menu up out of view
-    menuCloseBtn.addEventListener('click', () => {
+    document.getElementById('menuCloseBtn').addEventListener('click', () => {
       mobileMenuDrawer.classList.add('-translate-y-full');
-      document.body.style.overflow = ''; // Restore background scrolling
+      document.body.style.overflow = ''; 
     });
 
-
-    // 2. Safe Application Global Storage Instantiation Wrapper Context Setup
+    // 2. Acode-Proof Supabase Initialization
     if (!window.mySupabase) {
-      window.mySupabase = supabase.createClient(
+      window.mySupabase = window.supabase.createClient(
         'https://nzsbvtepxuqheebdwtei.supabase.co', 
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56c2J2dGVweHVxaGVlYmR3dGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjc2NzgsImV4cCI6MjA5NjcwMzY3OH0.WZ5_6yX_pmHpO4DU4rtQpKgFXCSZrhVSi6CzaEYTWus'
       );
     }
 
-    // Stateful core layout variables
     let rawInventoryData = [];
-    let activeLayoutFormat = 'list'; 
+    let activeLayoutFormat = 'grid'; 
 
-    // 3. Fetch Catalog Inventory List Records Context Object Method
+    // 3. Fetch Data from Supabase
     async function loadInventoryItems() {
       try {
         const { data, error } = await window.mySupabase
@@ -216,15 +193,16 @@
         processAndRenderCatalog();
 
       } catch (err) {
-        console.error("Database connection fault tracking detail logs:", err);
+        console.error("Database connection fault tracking:", err);
         document.getElementById('loadingFeed').innerHTML = `
-          <p class="text-red-500 font-medium text-sm text-center">
-            <i class="fa-solid fa-triangle-exclamation mr-1"></i> Sync broken. Please try reloading the dashboard page.
-          </p>`;
+          <div class="bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 flex items-center gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-xl"></i> 
+            <p class="font-medium">Failed to load marketplace data. Please check your connection and refresh.</p>
+          </div>`;
       }
     }
 
-    // 4. Process Content Rendering Mechanics
+    // 4. Filter, Sort, and Render UI
     function processAndRenderCatalog() {
       const loadingFeed = document.getElementById('loadingFeed');
       const emptyFeed = document.getElementById('emptyFeed');
@@ -233,7 +211,7 @@
 
       loadingFeed.classList.add('hidden');
 
-      // Filter local references on key inputs
+      // Filter processing
       const searchWord = document.getElementById('keywordSearch').value.toLowerCase().trim();
       const conditionFilter = document.getElementById('conditionSelect').value;
 
@@ -247,13 +225,12 @@
         if ((item.title + ' ' + item.description).toLowerCase().includes('new') || (item.title + ' ' + item.description).toLowerCase().includes('sealed')) {
           itemCondition = 'New';
         }
-
         const conditionMatch = conditionFilter === 'All' || itemCondition === conditionFilter;
 
         return textMatch && conditionMatch;
       });
 
-      // Sort calculation processing
+      // Sort processing
       const sortValue = document.getElementById('sortSelect').value;
       if (sortValue === 'low-high') {
         runtimeDisplayList.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
@@ -266,16 +243,20 @@
       if (runtimeDisplayList.length === 0) {
         catalogFeed.classList.add('hidden');
         emptyFeed.classList.remove('hidden');
+        emptyFeed.style.display = 'flex';
         return;
       }
 
       emptyFeed.classList.add('hidden');
+      emptyFeed.style.display = 'none';
       catalogFeed.classList.remove('hidden');
 
+      // Responsive Grid vs List container classes
       if (activeLayoutFormat === 'grid') {
-        catalogFeed.className = "grid grid-cols-2 gap-3 space-y-0";
+        // Desktop uses 4 or 5 columns depending on screen size. Mobile uses 2.
+        catalogFeed.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6";
       } else {
-        catalogFeed.className = "space-y-3";
+        catalogFeed.className = "flex flex-col gap-4";
       }
 
       catalogFeed.innerHTML = '';
@@ -285,80 +266,74 @@
         try {
           if (item.image_url) {
             const parsedArray = JSON.parse(item.image_url);
-            if (Array.isArray(parsedArray) && parsedArray.length > 0) {
-              coverImgSource = parsedArray[0];
-            }
+            if (Array.isArray(parsedArray) && parsedArray.length > 0) coverImgSource = parsedArray[0];
           }
         } catch(e) {
-          if (typeof item.image_url === 'string' && item.image_url.startsWith('http')) {
-            coverImgSource = item.image_url;
-          }
+          if (typeof item.image_url === 'string' && item.image_url.startsWith('http')) coverImgSource = item.image_url;
         }
 
         let labelTagText = 'USED';
-        let labelTagColorClass = 'bg-orange-500 text-white text-[10px]';
+        let labelTagColorClass = 'bg-orange-500';
         if ((item.title + ' ' + item.description).toLowerCase().includes('new') || (item.title + ' ' + item.description).toLowerCase().includes('sealed')) {
           labelTagText = 'NEW';
-          labelTagColorClass = 'bg-blue-500 text-white text-[10px]';
+          labelTagColorClass = 'bg-blue-500';
         }
 
         const rawPhoneText = (item.whatsapp || '').trim().replace(/^0/, '');
         const outMessageGreeting = `Hello, I'm interested in buying your item "${item.title}" listed on E-Buy Uganda. Is it available?`;
         const actionWhatsAppLink = `https://wa.me/256${rawPhoneText}?text=${encodeURIComponent(outMessageGreeting)}`;
+        const formattedPrice = parseFloat(item.price || 0).toLocaleString();
 
         const cardItemBox = document.createElement('div');
 
         if (activeLayoutFormat === 'grid') {
-          cardItemBox.className = "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col relative";
+          // Responsive Grid Card
+          cardItemBox.className = "bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col relative group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer";
           cardItemBox.innerHTML = `
-            <div class="relative w-full aspect-square bg-gray-50 overflow-hidden">
-              <img src="${coverImgSource}" alt="${item.title}" class="w-full h-full object-cover">
-              <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md font-black tracking-wider shadow-sm ${labelTagColorClass}">
-                ${labelTagText}
-              </span>
+            <div class="relative w-full aspect-square md:h-56 bg-gray-50 overflow-hidden border-b border-gray-100">
+              <img src="${coverImgSource}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-3 left-3 px-2 py-1 rounded-md font-black tracking-wider shadow-sm text-white text-[10px] uppercase ${labelTagColorClass}">${labelTagText}</span>
+              <span class="absolute top-3 right-3 px-2 py-1 rounded-full text-[10px] font-bold bg-white/90 backdrop-blur-sm text-gray-700 shadow-sm"><i class="fa-solid fa-truck-fast text-green-600 mr-1"></i>${item.delivery_mode || 'Delivery'}</span>
             </div>
-            <div class="p-3 flex-1 flex flex-col justify-between gap-1">
+            <div class="p-4 flex-1 flex flex-col justify-between gap-1">
               <div>
-                <h4 class="font-bold text-gray-800 text-sm line-clamp-1 leading-tight">${item.title}</h4>
-                <p class="text-[11px] text-gray-400 font-medium flex items-center gap-0.5 mt-0.5">
-                  <i class="fa-solid fa-location-dot"></i> ${item.location || 'Uganda'}
-                </p>
-                <div class="text-sm font-extrabold text-green-600 mt-1">
-                  ${parseFloat(item.price || 0).toLocaleString()} <span class="text-[10px] font-bold">UGX</span>
-                </div>
+                <h4 class="font-bold text-gray-800 text-base md:text-lg line-clamp-1 leading-tight mb-1">${item.title}</h4>
+                <div class="text-lg md:text-xl font-black text-green-600 mb-2">UGX ${formattedPrice}</div>
+                <p class="text-xs text-gray-500 font-medium flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> <span class="truncate">${item.location || 'Uganda'}</span></p>
               </div>
-              <a href="${actionWhatsAppLink}" target="_blank" class="w-full mt-2 bg-emerald-500 text-white font-bold py-2 rounded-xl text-xs text-center flex items-center justify-center gap-1.5 transition active:scale-95">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Chat
+              <a href="${actionWhatsAppLink}" target="_blank" class="w-full mt-4 bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-sm text-center flex items-center justify-center gap-1.5 transition active:scale-95 hover:bg-emerald-600 shadow-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Buy
               </a>
             </div>
           `;
         } else {
-          cardItemBox.className = "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-3 flex gap-3 relative";
+          // Responsive List Card
+          cardItemBox.className = "bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden p-4 flex gap-4 md:gap-6 relative hover:shadow-md transition-shadow cursor-pointer group";
           cardItemBox.innerHTML = `
-            <div class="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
-              <img src="${coverImgSource}" alt="${item.title}" class="w-full h-full object-cover">
-              <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded font-black text-[9px] tracking-wider shadow-sm ${labelTagColorClass}">
-                ${labelTagText}
-              </span>
+            <div class="relative w-28 h-28 md:w-48 md:h-48 rounded-2xl overflow-hidden bg-gray-50 flex-shrink-0">
+              <img src="${coverImgSource}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-2 left-2 px-2 py-1 rounded-md font-black text-[10px] text-white tracking-wider shadow-sm uppercase ${labelTagColorClass}">${labelTagText}</span>
             </div>
-            <div class="flex-1 flex flex-col justify-between py-0.5">
-              <div class="space-y-0.5">
-                <h4 class="font-bold text-gray-900 text-base line-clamp-1 leading-tight pr-4">${item.title}</h4>
-                <p class="text-xs text-gray-400 font-medium flex items-center gap-1">
-                  <i class="fa-solid fa-location-dot text-gray-400"></i> ${item.location || 'Kampala'}
-                </p>
-                <div class="text-base font-extrabold text-green-600 pt-0.5">
-                  ${parseFloat(item.price || 0).toLocaleString()} <span class="text-xs font-bold">UGX</span>
+            <div class="flex-1 flex flex-col justify-between py-1 min-w-0">
+              <div class="space-y-1 md:space-y-2">
+                <div class="flex justify-between items-start">
+                  <h4 class="font-bold text-gray-900 text-lg md:text-2xl line-clamp-1 md:line-clamp-2 pr-4">${item.title}</h4>
+                  <span class="hidden md:inline-flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-green-100 whitespace-nowrap"><i class="fa-solid fa-truck-fast"></i> ${item.delivery_mode || 'Delivery'}</span>
                 </div>
+                <div class="text-xl md:text-3xl font-black text-green-600 pt-1">UGX ${formattedPrice}</div>
+                <p class="text-xs md:text-sm text-gray-500 font-medium flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-gray-400"></i> ${item.location || 'Kampala'}</p>
+                <p class="text-gray-500 text-sm hidden md:block line-clamp-2 mt-2">${item.description || 'Check out this great deal on E-Buy Uganda.'}</p>
               </div>
               
-              <div class="flex justify-between items-center mt-1">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">
-                  <i class="fa-solid fa-truck-fast"></i> ${item.delivery_mode || 'Delivery'}
-                </span>
-                <a href="${actionWhatsAppLink}" target="_blank" class="bg-emerald-500 text-white font-bold px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 transition active:scale-95 shadow-sm">
-                  <i class="fa-brands fa-whatsapp"></i> Buy
-                </a>
+              <div class="flex justify-between items-center mt-3 md:mt-0">
+                <span class="md:hidden text-[10px] font-bold px-2 py-1 rounded-lg bg-gray-100 text-gray-600 border border-gray-200 flex items-center gap-1"><i class="fa-solid fa-truck-fast"></i> ${item.delivery_mode || 'Delivery'}</span>
+                
+                <div class="flex gap-2 w-full md:w-auto md:ml-auto">
+                  <button class="px-4 py-2 border border-gray-200 text-gray-400 rounded-xl hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition"><i class="fa-regular fa-heart text-lg"></i></button>
+                  <a href="${actionWhatsAppLink}" target="_blank" class="flex-1 md:flex-none bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm md:text-base flex items-center justify-center gap-2 transition active:scale-95 shadow-sm hover:bg-emerald-600">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Contact Seller
+                  </a>
+                </div>
               </div>
             </div>
           `;
@@ -368,27 +343,31 @@
       });
     }
 
-    // 5. Input Operational Event Watchers Hookup Routines
+    // 5. Connect Input Listeners
     document.getElementById('keywordSearch').addEventListener('input', processAndRenderCatalog);
     document.getElementById('categorySelect').addEventListener('change', processAndRenderCatalog);
     document.getElementById('conditionSelect').addEventListener('change', processAndRenderCatalog);
     document.getElementById('sortSelect').addEventListener('change', processAndRenderCatalog);
 
-    document.getElementById('viewGridBtn').addEventListener('click', () => {
+    // View Toggles
+    const btnGrid = document.getElementById('viewGridBtn');
+    const btnList = document.getElementById('viewListBtn');
+
+    btnGrid.addEventListener('click', () => {
       activeLayoutFormat = 'grid';
-      document.getElementById('viewGridBtn').className = "p-2 text-white bg-green-600 transition focus:outline-none";
-      document.getElementById('viewListBtn').className = "p-2 text-gray-400 hover:text-gray-600 transition focus:outline-none border-r border-gray-100";
+      btnGrid.className = "p-2.5 w-11 text-white bg-green-600 transition focus:outline-none border-r border-gray-100 flex justify-center items-center";
+      btnList.className = "p-2.5 w-11 text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition focus:outline-none flex justify-center items-center";
       processAndRenderCatalog();
     });
 
-    document.getElementById('viewListBtn').addEventListener('click', () => {
+    btnList.addEventListener('click', () => {
       activeLayoutFormat = 'list';
-      document.getElementById('viewListBtn').className = "p-2 text-white bg-green-600 transition focus:outline-none";
-      document.getElementById('viewGridBtn').className = "p-2 text-gray-400 hover:text-gray-600 transition focus:outline-none border-r border-gray-100";
+      btnList.className = "p-2.5 w-11 text-white bg-green-600 transition focus:outline-none flex justify-center items-center";
+      btnGrid.className = "p-2.5 w-11 text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition focus:outline-none border-r border-gray-100 flex justify-center items-center";
       processAndRenderCatalog();
     });
 
-    // Run Initial Load Script execution sequence entry point context logic loop
+    // Execute Application Setup
     window.addEventListener('DOMContentLoaded', loadInventoryItems);
   </script>
 </body>
