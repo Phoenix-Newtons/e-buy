@@ -21,3 +21,7 @@ A full-featured marketplace website for buying and selling old & new items acros
   - Public shop pages for traders
 
 ## File Structure
+
+## New React storefront
+
+A redesigned, typed storefront (hero, sticky multi-parameter search, accordion filters, skeleton/empty states, WhatsApp/call actions, dark mode) lives in [`storefront/`](storefront/README.md). The original static pages are unchanged.

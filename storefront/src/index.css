@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Semantic design tokens (space separated RGB so alpha utilities work) */
+/* ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --color-canvas: 246 249 247;
+    --color-surface: 255 255 255;
+    --color-surface-muted: 240 244 242;
+    --color-surface-raised: 255 255 255;
+    --color-surface-inverse: 5 46 28;
+
+    --color-content: 15 23 20;
+    --color-content-muted: 71 85 80;
+    --color-content-subtle: 105 120 113;
+    --color-content-inverse: 255 255 255;
+
+    --color-line: 226 232 229;
+    --color-line-strong: 200 211 205;
+
+    --color-brand: 21 128 61;
+    --color-brand-hover: 22 101 52;
+    --color-brand-soft: 220 252 231;
+    --color-brand-soft-content: 22 101 52;
+    --color-brand-contrast: 255 255 255;
+    --color-accent: 250 204 21;
+    --color-accent-soft: 254 249 195;
+    --color-accent-contrast: 66 32 6;
+    --color-accent-soft-content: 133 77 14;
+
+    --color-success: 21 128 61;
+    --color-success-soft: 220 252 231;
+    --color-danger: 185 28 28;
+    --color-danger-soft: 254 226 226;
+    --color-warning: 180 83 9;
+    --color-warning-soft: 254 243 199;
+    --color-info: 3 105 161;
+    --color-info-soft: 224 242 254;
+
+    --color-whatsapp: 15 123 108;
+    --color-whatsapp-hover: 11 98 86;
+
+    --shadow: 15 23 20;
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --color-canvas: 8 13 11;
+    --color-surface: 16 23 20;
+    --color-surface-muted: 25 34 30;
+    --color-surface-raised: 28 38 33;
+    --color-surface-inverse: 4 24 15;
+
+    --color-content: 236 243 239;
+    --color-content-muted: 166 181 173;
+    --color-content-subtle: 123 139 131;
+    --color-content-inverse: 255 255 255;
+
+    --color-line: 39 51 45;
+    --color-line-strong: 62 77 70;
+
+    --color-brand: 34 197 94;
+    --color-brand-hover: 74 222 128;
+    --color-brand-soft: 20 52 33;
+    --color-brand-soft-content: 134 239 172;
+    --color-brand-contrast: 3 20 10;
+    --color-accent: 250 204 21;
+    --color-accent-soft: 62 52 8;
+    --color-accent-contrast: 66 32 6;
+    --color-accent-soft-content: 253 224 71;
+
+    --color-success: 74 222 128;
+    --color-success-soft: 20 52 33;
+    --color-danger: 248 113 113;
+    --color-danger-soft: 69 26 26;
+    --color-warning: 251 191 36;
+    --color-warning-soft: 66 44 8;
+    --color-info: 56 189 248;
+    --color-info-soft: 12 45 66;
+
+    --color-whatsapp: 37 211 102;
+    --color-whatsapp-hover: 74 222 128;
+
+    --shadow: 0 0 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-content antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-surface;
+  }
+
+  ::selection {
+    @apply bg-brand/25;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Hide scrollbars on horizontal scrollers while keeping them scrollable. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Skeleton shimmer: a sweeping highlight over a muted block. */
+  .skeleton {
+    @apply relative overflow-hidden bg-surface-muted;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(var(--color-surface) / 0.65) 50%,
+      transparent 100%
+    );
+  }
+
+  /* Dual-thumb price slider: two native range inputs layered on one track. */
+  .range-thumb {
+    @apply pointer-events-none absolute inset-0 h-6 w-full appearance-none bg-transparent;
+  }
+  .range-thumb::-webkit-slider-runnable-track {
+    @apply h-6 bg-transparent;
+  }
+  .range-thumb::-moz-range-track {
+    @apply h-6 bg-transparent;
+  }
+  .range-thumb::-webkit-slider-thumb {
+    @apply pointer-events-auto mt-0.5 h-5 w-5 cursor-grab appearance-none rounded-full border-2 border-brand bg-surface shadow-card;
+  }
+  .range-thumb::-moz-range-thumb {
+    @apply pointer-events-auto h-5 w-5 cursor-grab appearance-none rounded-full border-2 border-brand bg-surface shadow-card;
+  }
+  .range-thumb:active::-webkit-slider-thumb {
+    @apply cursor-grabbing;
+  }
+  .range-thumb:focus-visible::-webkit-slider-thumb {
+    @apply ring-2 ring-brand ring-offset-2 ring-offset-surface;
+  }
+  .range-thumb:focus-visible::-moz-range-thumb {
+    @apply ring-2 ring-brand ring-offset-2 ring-offset-surface;
+  }
+  .range-thumb:focus-visible {
+    box-shadow: none;
+  }
+}
