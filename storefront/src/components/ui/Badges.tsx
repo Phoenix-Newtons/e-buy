@@ -29,7 +29,7 @@ export function LocationBadge({ label, className }: { label: string; className?:
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-full bg-surface/90 px-2.5 py-1 text-[11px] font-semibold text-content shadow-card backdrop-blur-sm",
+        "inline-flex max-w-full items-center gap-1 rounded-full bg-surface/95 px-2.5 py-1 text-[11px] font-semibold text-content shadow-card",
         className,
       )}
     >

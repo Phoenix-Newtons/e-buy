@@ -7,10 +7,13 @@ import {
   Car,
   Clock,
   Flame,
+  History,
   House,
+  RefreshCw,
   Shirt,
   Smartphone,
   Sofa,
+  Sparkles,
   Star,
   Truck,
   Tv,
@@ -29,10 +32,8 @@ import type {
 
 export const REGIONS: readonly RegionOption[] = [
   { id: "kampala", label: "Kampala", subregion: "Central" },
-  { id: "wakiso", label: "Wakiso", subregion: "Central" },
-  { id: "mukono", label: "Mukono", subregion: "Central" },
+  { id: "entebbe", label: "Entebbe", subregion: "Central" },
   { id: "jinja", label: "Jinja", subregion: "Eastern" },
-  { id: "mbale", label: "Mbale", subregion: "Eastern" },
   { id: "mbarara", label: "Mbarara", subregion: "Western" },
   { id: "gulu", label: "Gulu", subregion: "Northern" },
 ];
@@ -40,6 +41,7 @@ export const REGIONS: readonly RegionOption[] = [
 export const CATEGORIES: readonly CategoryOption[] = [
   {
     id: "phones",
+    shortLabel: "Phones",
     label: "Phones & Tablets",
     icon: Smartphone,
     tone: "sky",
@@ -47,6 +49,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "electronics",
+    shortLabel: "Electronics",
     label: "Electronics",
     icon: Tv,
     tone: "violet",
@@ -54,6 +57,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "vehicles",
+    shortLabel: "Vehicles",
     label: "Vehicles",
     icon: Car,
     tone: "rose",
@@ -61,6 +65,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "fashion",
+    shortLabel: "Fashion",
     label: "Fashion",
     icon: Shirt,
     tone: "pink",
@@ -68,6 +73,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "real-estate",
+    shortLabel: "Real Estate",
     label: "Real Estate",
     icon: House,
     tone: "orange",
@@ -75,6 +81,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "furniture",
+    shortLabel: "Furniture",
     label: "Home & Furniture",
     icon: Sofa,
     tone: "amber",
@@ -82,6 +89,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "agriculture",
+    shortLabel: "Agriculture",
     label: "Agriculture",
     icon: Wheat,
     tone: "lime",
@@ -89,6 +97,7 @@ export const CATEGORIES: readonly CategoryOption[] = [
   },
   {
     id: "services",
+    shortLabel: "Services",
     label: "Jobs & Services",
     icon: Briefcase,
     tone: "teal",
@@ -97,9 +106,9 @@ export const CATEGORIES: readonly CategoryOption[] = [
 ];
 
 export const CONDITIONS: readonly ConditionOption[] = [
-  { id: "new", label: "Brand New", description: "Sealed or never used" },
-  { id: "refurbished", label: "Refurbished", description: "Tested and restored" },
-  { id: "used", label: "Used", description: "Pre-owned, working" },
+  { id: "new", label: "Brand New", description: "Sealed or never used", icon: Sparkles },
+  { id: "refurbished", label: "Refurbished", description: "Tested and restored", icon: RefreshCw },
+  { id: "used", label: "Used", description: "Pre-owned, working", icon: History },
 ];
 
 export const VERIFICATIONS: readonly VerificationOption[] = [
@@ -131,21 +140,33 @@ export const SORT_OPTIONS: readonly SortOption[] = [
   { id: "top-rated", label: "Best rated sellers", icon: Star },
 ];
 
+/** Cheapest and most expensive listings the marketplace currently carries. */
+export const PRICE_FLOOR = 180_000;
+
 /** Upper bound of the price slider. A slider value at this bound means "no limit". */
-export const PRICE_CEILING = 20_000_000;
+export const PRICE_CEILING = 42_000_000;
 
 export const PRICE_BRACKETS: readonly PriceBracket[] = [
   { id: "any", label: "Any price", min: 0, max: null },
-  { id: "under-100k", label: "Under UGX 100,000", min: 0, max: 100_000 },
-  { id: "100k-500k", label: "UGX 100,000 – 500,000", min: 100_000, max: 500_000 },
+  { id: "under-500k", label: "Under UGX 500,000", min: 0, max: 500_000 },
   { id: "500k-2m", label: "UGX 500,000 – 2M", min: 500_000, max: 2_000_000 },
   { id: "2m-10m", label: "UGX 2M – 10M", min: 2_000_000, max: 10_000_000 },
   { id: "10m-plus", label: "Over UGX 10M", min: 10_000_000, max: null },
 ];
 
+/** Prompts offered as quick-click chips in the shopping assistant. They all match the demo listings. */
+export const ASSISTANT_SUGGESTIONS: readonly string[] = [
+  "Show vehicles in Kampala",
+  "Find fashion items under UGX 500,000",
+  "iPhone 13 Pro in Kampala",
+  "MacBook Air in Entebbe",
+  "Cheapest phones in Gulu",
+  "Trusted sellers in Jinja",
+];
+
 export const INITIAL_FILTERS: FilterState = {
   keyword: "",
-  region: "all",
+  regions: [],
   category: "all",
   conditions: [],
   priceMin: 0,

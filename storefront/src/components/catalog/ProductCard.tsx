@@ -1,5 +1,7 @@
 import { memo, type ReactElement } from "react";
-import { ArrowRight, Clock, Star, Truck } from "lucide-react";
+import { ArrowRight, Clock, Star, Tag, Truck } from "lucide-react";
+import { CATEGORIES, CATEGORY_TONE_CLASSES } from "../../data/constants";
+import { cn } from "../../lib/cn";
 import { formatRelativeTime, formatUGX } from "../../lib/format";
 import { productDetailUrl } from "../../lib/links";
 import type { Product } from "../../types";
@@ -18,11 +20,13 @@ function ProductCardBase({ product, saved, onToggleSaved }: ProductCardProps): R
   const { seller } = product;
   const detailUrl = productDetailUrl(product);
   const headingId = `product-${product.id}-title`;
+  const category = CATEGORIES.find((item) => item.id === product.category);
+  const cityName = product.locationLabel.split(",")[0] ?? product.locationLabel;
 
   return (
     <article
       aria-labelledby={headingId}
-      className="group flex h-full animate-fade-up flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+      className="group flex h-full animate-fade-up flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <figure className="relative aspect-video overflow-hidden">
         <ProductImage
@@ -44,7 +48,17 @@ function ProductCardBase({ product, saved, onToggleSaved }: ProductCardProps): R
       </figure>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold ring-1",
+              category ? CATEGORY_TONE_CLASSES[category.tone].badge : "bg-surface-muted text-content-muted ring-line",
+            )}
+          >
+            <Tag aria-hidden="true" className="h-3 w-3" />
+            <span className="sr-only">Category: </span>
+            {category?.shortLabel ?? product.category}
+          </span>
           <SellerTierBadge tier={seller.tier} />
           {seller.rating !== null && (
             <span className="inline-flex items-center gap-1 text-xs font-semibold text-content-muted">
@@ -73,7 +87,9 @@ function ProductCardBase({ product, saved, onToggleSaved }: ProductCardProps): R
 
         <p className="mt-3 flex items-center gap-3 text-xs text-content-subtle">
           <span className="flex min-w-0 items-center gap-1">
-            <span className="truncate font-medium text-content-muted">{seller.name}</span>
+            <span className="truncate font-medium text-content-muted" title={product.area ? `${seller.name} · ${product.area}, ${cityName}` : seller.name}>
+              {seller.name}
+            </span>
           </span>
           <span className="flex shrink-0 items-center gap-1">
             <Clock aria-hidden="true" className="h-3 w-3" />

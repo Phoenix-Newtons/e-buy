@@ -61,7 +61,7 @@ export function TrendingCarousel({ items, regionLabel, isSaved, onToggleSaved }:
       >
         {items.map((product) => (
           <li key={product.id} className="w-64 shrink-0 snap-start sm:w-72">
-            <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+            <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="relative aspect-video overflow-hidden">
                 <ProductImage
                   src={product.imageUrl}

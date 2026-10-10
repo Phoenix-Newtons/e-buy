@@ -3,7 +3,7 @@ import { ChevronDown, Info, SlidersHorizontal } from "lucide-react";
 import { PAGE_SIZE } from "../../data/constants";
 import { getActiveChips } from "../../lib/catalog";
 import { pluralize } from "../../lib/format";
-import type { CategoryId, FilterAction, FilterState, LoadStatus, Product } from "../../types";
+import type { CategoryOption, FacetCounts, FilterAction, FilterState, LoadStatus, Product } from "../../types";
 import { FilterDrawer } from "../filters/FilterDrawer";
 import { FilterSidebar } from "../filters/FilterSidebar";
 import { EmptyState } from "../states/EmptyState";
@@ -21,8 +21,9 @@ export interface CatalogSectionProps {
   filters: FilterState;
   dispatch: Dispatch<FilterAction>;
   results: readonly Product[];
-  /** Counts used by the category radio list; they respect every filter except category. */
-  categoryCounts: Readonly<Record<CategoryId, number>>;
+  /** Counts for the category, location and condition facets (each ignores its own filter). */
+  facetCounts: FacetCounts;
+  categories: readonly CategoryOption[];
   trendingItems: readonly Product[];
   trendingRegionLabel: string;
   isSaved: (id: string) => boolean;
@@ -37,7 +38,8 @@ export function CatalogSection({
   filters,
   dispatch,
   results,
-  categoryCounts,
+  facetCounts,
+  categories,
   trendingItems,
   trendingRegionLabel,
   isSaved,
@@ -57,7 +59,7 @@ export function CatalogSection({
   return (
     <section id="catalog" aria-labelledby="catalog-heading" className="mx-auto max-w-7xl scroll-mt-40 px-4 pt-14 sm:px-6">
       <div className="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <FilterSidebar filters={filters} dispatch={dispatch} categoryCounts={categoryCounts} activeCount={chips.length} />
+        <FilterSidebar filters={filters} dispatch={dispatch} facetCounts={facetCounts} categories={categories} activeCount={chips.length} />
 
         <div className="min-w-0">
           {/* Results toolbar */}
@@ -159,7 +161,7 @@ export function CatalogSection({
         onClose={closeDrawer}
         filters={filters}
         dispatch={dispatch}
-        categoryCounts={categoryCounts}
+        facetCounts={facetCounts} categories={categories}
         activeCount={chips.length}
         resultCount={results.length}
       />

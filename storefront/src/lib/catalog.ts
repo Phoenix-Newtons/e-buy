@@ -1,7 +1,7 @@
 import { CATEGORIES, INITIAL_FILTERS, PRICE_BRACKETS, REGIONS, VERIFICATIONS, CONDITIONS } from "../data/constants";
 import type {
   ActiveFilterChip,
-  CategoryId,
+  FacetCounts,
   FilterAction,
   FilterState,
   Product,
@@ -22,8 +22,13 @@ export function filterReducer(state: FilterState, action: FilterAction): FilterS
   switch (action.type) {
     case "setKeyword":
       return { ...state, keyword: action.keyword };
-    case "setRegion":
-      return { ...state, region: action.region };
+    case "setRegions":
+      return { ...state, regions: action.regions };
+    case "toggleRegion":
+      return { ...state, regions: toggle(state.regions, action.region) };
+    case "apply":
+      // A patch always starts from a clean slate so old filters never linger invisibly.
+      return { ...INITIAL_FILTERS, sort: state.sort, ...action.patch };
     case "setCategory":
       return { ...state, category: action.category };
     case "toggleCondition":
@@ -73,7 +78,7 @@ function matchesVerification(product: Product, filters: FilterState): boolean {
 }
 
 export function matchesFilters(product: Product, filters: FilterState): boolean {
-  if (filters.region !== "all" && product.region !== filters.region) return false;
+  if (filters.regions.length > 0 && !(product.region !== "other" && filters.regions.includes(product.region))) return false;
   if (filters.category !== "all" && product.category !== filters.category) return false;
   if (filters.conditions.length > 0 && !filters.conditions.includes(product.condition)) return false;
   if (product.priceUgx < filters.priceMin) return false;
@@ -94,12 +99,24 @@ export function applyFilters(products: readonly Product[], filters: FilterState)
   return products.filter((product) => matchesFilters(product, filters)).sort(compareBy[filters.sort]);
 }
 
-/** Per-category listing counts, ignoring the category filter itself so counts stay stable. */
-export function countByCategory(products: readonly Product[], filters: FilterState): Record<CategoryId, number> {
-  const counts = Object.fromEntries(CATEGORIES.map((category) => [category.id, 0])) as Record<CategoryId, number>;
+/**
+ * Listing counts for every option of the category, region and condition facets.
+ * Each facet ignores its own filter, so selecting "Kampala" does not zero out the other cities.
+ */
+export function computeFacetCounts(products: readonly Product[], filters: FilterState): FacetCounts {
+  const counts: FacetCounts = {
+    category: Object.fromEntries(CATEGORIES.map((item) => [item.id, 0])) as FacetCounts["category"],
+    region: Object.fromEntries(REGIONS.map((item) => [item.id, 0])) as FacetCounts["region"],
+    condition: Object.fromEntries(CONDITIONS.map((item) => [item.id, 0])) as FacetCounts["condition"],
+  };
   const withoutCategory: FilterState = { ...filters, category: "all" };
+  const withoutRegion: FilterState = { ...filters, regions: [] };
+  const withoutCondition: FilterState = { ...filters, conditions: [] };
+
   for (const product of products) {
-    if (matchesFilters(product, withoutCategory)) counts[product.category] += 1;
+    if (matchesFilters(product, withoutCategory)) counts.category[product.category] += 1;
+    if (product.region !== "other" && matchesFilters(product, withoutRegion)) counts.region[product.region] += 1;
+    if (matchesFilters(product, withoutCondition)) counts.condition[product.condition] += 1;
   }
   return counts;
 }
@@ -107,10 +124,10 @@ export function countByCategory(products: readonly Product[], filters: FilterSta
 /** Items to suggest when nothing matches: trending first, boosted if in the user's region. */
 export function trendingNearby(
   products: readonly Product[],
-  region: RegionId | "all",
+  regions: readonly RegionId[],
   limit = 10,
 ): { items: Product[]; regionLabel: string } {
-  const homeRegion: RegionId = region === "all" ? "kampala" : region;
+  const homeRegion: RegionId = regions[0] ?? "kampala";
   const regionLabel = REGIONS.find((item) => item.id === homeRegion)?.label ?? "Kampala";
   const score = (product: Product): number => product.trendingScore + (product.region === homeRegion ? 10_000 : 0);
   const items = [...products].sort((a, b) => score(b) - score(a)).slice(0, limit);
@@ -139,9 +156,13 @@ export function getActiveChips(filters: FilterState): ActiveFilterChip[] {
   if (filters.keyword.trim().length > 0) {
     chips.push({ key: "keyword", label: `“${filters.keyword.trim()}”`, action: { type: "setKeyword", keyword: "" } });
   }
-  if (filters.region !== "all") {
-    const region = REGIONS.find((item) => item.id === filters.region);
-    chips.push({ key: "region", label: region?.label ?? filters.region, action: { type: "setRegion", region: "all" } });
+  for (const regionId of filters.regions) {
+    const region = REGIONS.find((item) => item.id === regionId);
+    chips.push({
+      key: `region-${regionId}`,
+      label: region?.label ?? regionId,
+      action: { type: "toggleRegion", region: regionId },
+    });
   }
   if (filters.category !== "all") {
     const category = CATEGORIES.find((item) => item.id === filters.category);

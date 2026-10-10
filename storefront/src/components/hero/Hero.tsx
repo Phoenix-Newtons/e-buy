@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { ArrowRight, BadgeCheck, MessageCircle, ShieldCheck, Sparkles, Wallet } from "lucide-react";
+import { ArrowRight, BadgeCheck, Lock, MessageCircle, ShieldCheck, Sparkles, Wallet } from "lucide-react";
 import { CATEGORIES, CATEGORY_TONE_CLASSES } from "../../data/constants";
 import { cn } from "../../lib/cn";
 import { legacyPage } from "../../lib/links";
@@ -30,8 +30,7 @@ interface HeroTile {
 
 const LEFT_COLUMN: readonly HeroTile[] = [
   { category: "phones", height: "h-52" },
-  { category: "fashion", height: "h-36" },
-  { category: "furniture", height: "h-40" },
+  { category: "fashion", height: "h-40" },
 ];
 const RIGHT_COLUMN: readonly HeroTile[] = [
   { category: "vehicles", height: "h-40" },
@@ -57,7 +56,7 @@ function HeroCategoryTile({
       type="button"
       onClick={() => onPick(category.id)}
       className={cn(
-        "group relative flex w-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.12]",
+        "group relative flex w-full flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-left transition duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.12]",
         tile.height,
       )}
     >
@@ -83,8 +82,15 @@ export function Hero({ categoryCounts, onPickCategory }: HeroProps): ReactElemen
     <section id="top" aria-labelledby="hero-heading" className="relative overflow-hidden bg-surface-inverse text-content-inverse">
       {/* Decorative background */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-brand/30 blur-3xl" />
-        <div className="absolute -bottom-32 right-0 h-[28rem] w-[28rem] rounded-full bg-accent/15 blur-3xl" />
+        {/* Radial gradients give the same glow as a blurred blob without an expensive filter pass. */}
+        <div
+          className="absolute -left-40 -top-40 h-[40rem] w-[40rem]"
+          style={{ backgroundImage: "radial-gradient(closest-side, rgb(var(--color-brand) / 0.32), transparent)" }}
+        />
+        <div
+          className="absolute -bottom-52 -right-20 h-[44rem] w-[44rem]"
+          style={{ backgroundImage: "radial-gradient(closest-side, rgb(var(--color-accent) / 0.16), transparent)" }}
+        />
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -106,7 +112,7 @@ export function Hero({ categoryCounts, onPickCategory }: HeroProps): ReactElemen
             <span className="bg-gradient-to-r from-accent to-lime-300 bg-clip-text text-transparent">anywhere in Uganda.</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
-            Find new, refurbished and pre-loved deals near you in Kampala, Wakiso, Mukono, Mbarara, Gulu and beyond.
+            Find new, refurbished and pre-loved deals near you in Kampala, Entebbe, Jinja, Mbarara and Gulu.
             Talk to verified sellers on WhatsApp and pay safely with Mobile Money.
           </p>
 
@@ -143,6 +149,17 @@ export function Hero({ categoryCounts, onPickCategory }: HeroProps): ReactElemen
               {LEFT_COLUMN.map((tile) => (
                 <HeroCategoryTile key={tile.category} tile={tile} count={categoryCounts[tile.category]} onPick={onPickCategory} />
               ))}
+
+              {/* Safety reminder */}
+              <div aria-hidden="true" className="rounded-3xl border border-white/10 bg-white/[0.07] p-4">
+                <div className="flex items-center gap-2 text-xs font-bold text-accent">
+                  <ShieldCheck className="h-4 w-4" /> Buy with confidence
+                </div>
+                <p className="mt-2 flex items-start gap-2 text-xs leading-relaxed text-white/75">
+                  <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  Meet in public, inspect the item, then pay with Mobile Money.
+                </p>
+              </div>
             </div>
             <div className="flex flex-col gap-4 pt-10">
               {RIGHT_COLUMN.map((tile) => (
@@ -152,7 +169,7 @@ export function Hero({ categoryCounts, onPickCategory }: HeroProps): ReactElemen
               {/* Floating WhatsApp conversation preview */}
               <div
                 aria-hidden="true"
-                className="animate-float rounded-3xl border border-white/15 bg-surface p-4 text-content shadow-float"
+                className="rounded-3xl border border-white/15 bg-surface p-4 text-content shadow-card"
               >
                 <div className="flex items-center gap-2 text-xs font-bold text-whatsapp">
                   <MessageCircle className="h-4 w-4" /> WhatsApp

@@ -3,7 +3,7 @@ import { RotateCcw, X } from "lucide-react";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import { cn } from "../../lib/cn";
 import { pluralize } from "../../lib/format";
-import type { CategoryId, FilterAction, FilterState } from "../../types";
+import type { CategoryOption, FacetCounts, FilterAction, FilterState } from "../../types";
 import { FilterPanels } from "./FilterPanels";
 
 export interface FilterDrawerProps {
@@ -11,7 +11,8 @@ export interface FilterDrawerProps {
   onClose: () => void;
   filters: FilterState;
   dispatch: Dispatch<FilterAction>;
-  categoryCounts: Readonly<Record<CategoryId, number>>;
+  facetCounts: FacetCounts;
+  categories: readonly CategoryOption[];
   activeCount: number;
   resultCount: number;
 }
@@ -26,7 +27,8 @@ export function FilterDrawer({
   onClose,
   filters,
   dispatch,
-  categoryCounts,
+  facetCounts,
+  categories,
   activeCount,
   resultCount,
 }: FilterDrawerProps): ReactElement {
@@ -53,7 +55,7 @@ export function FilterDrawer({
       <div
         aria-hidden="true"
         onClick={onClose}
-        className={cn("absolute inset-0 bg-black/55 backdrop-blur-sm transition-opacity duration-300", open ? "opacity-100" : "opacity-0")}
+        className={cn("absolute inset-0 bg-black/55 transition-opacity duration-300", open ? "opacity-100 backdrop-blur-sm" : "opacity-0")}
       />
       <aside
         role="dialog"
@@ -81,7 +83,7 @@ export function FilterDrawer({
         </div>
 
         <div className="flex-1 overflow-y-auto overscroll-contain px-5">
-          <FilterPanels filters={filters} dispatch={dispatch} categoryCounts={categoryCounts} idPrefix="drawer" />
+          <FilterPanels filters={filters} dispatch={dispatch} facetCounts={facetCounts} categories={categories} idPrefix="drawer" />
         </div>
 
         <div className="grid grid-cols-[auto_1fr] gap-3 border-t border-line bg-surface-raised p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">

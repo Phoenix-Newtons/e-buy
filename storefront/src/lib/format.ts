@@ -56,3 +56,24 @@ export function formatRelativeTime(isoDate: string, now: Date = new Date()): str
 export function pluralize(count: number, singular: string, plural: string = `${singular}s`): string {
   return count === 1 ? singular : plural;
 }
+
+/**
+ * Parses the ways people type shilling amounts: "1500000", "1,500,000", "UGX 1.5m",
+ * "500k", "2 million". Returns whole shillings, or `null` when the text is not an amount.
+ */
+export function parseUgxInput(raw: string): number | null {
+  const cleaned = raw.toLowerCase().replace(/ugx|shs?\.?|shillings?|,|\s/g, "");
+  const match = /^(\d+(?:\.\d+)?)(k|thousand|m|million)?$/.exec(cleaned);
+  if (!match || match[1] === undefined) return null;
+  const value = Number.parseFloat(match[1]);
+  const unit = match[2];
+  const multiplier = unit === "k" || unit === "thousand" ? 1_000 : unit === "m" || unit === "million" ? 1_000_000 : 1;
+  return Math.round(value * multiplier);
+}
+
+/** Adds thousands separators while the user types digits; leaves shorthand such as "1.5m" untouched. */
+export function formatAmountDraft(value: string): string {
+  if (!/^[\d,\s]*$/.test(value)) return value;
+  const digits = value.replace(/\D/g, "");
+  return digits.length === 0 ? "" : ugxNumber.format(Number.parseInt(digits, 10));
+}

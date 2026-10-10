@@ -40,7 +40,7 @@ function EmptyIllustration(): ReactElement {
 
 function suggestionFor(chips: readonly ActiveFilterChip[], filters: FilterState): string {
   if (chips.length === 0) return "There are no listings yet. Check back soon or be the first to post an item.";
-  if (filters.region !== "all") return "Try widening your search to all of Uganda, or remove a few filters.";
+  if (filters.regions.length > 0) return "Try widening your search to all of Uganda, or remove a few filters.";
   return "Try different keywords, a wider price range, or fewer filters.";
 }
 
@@ -80,10 +80,10 @@ export function EmptyState({
               Clear All Filters
             </button>
           )}
-          {filters.region !== "all" && (
+          {filters.regions.length > 0 && (
             <button
               type="button"
-              onClick={() => dispatch({ type: "setRegion", region: "all" })}
+              onClick={() => dispatch({ type: "setRegions", regions: [] })}
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-surface px-6 py-3.5 text-[15px] font-bold text-content transition hover:bg-surface-muted sm:w-auto"
             >
               <MapPin aria-hidden="true" className="h-4 w-4" />

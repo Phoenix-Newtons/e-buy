@@ -23,7 +23,7 @@ export function SaveButton({ saved, onToggle, itemTitle, className }: SaveButton
         onToggle();
       }}
       className={cn(
-        "flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 shadow-card backdrop-blur-sm transition hover:scale-110 active:scale-95",
+        "flex h-9 w-9 items-center justify-center rounded-full bg-surface/95 shadow-card transition hover:scale-110 active:scale-95",
         className,
       )}
     >

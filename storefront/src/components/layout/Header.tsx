@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from "react";
-import { Heart, Menu, Moon, Store, Sun, X } from "lucide-react";
+import { Heart, Menu, Moon, Sparkles, Store, Sun, X } from "lucide-react";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import type { ThemeMode } from "../../hooks/useTheme";
 import { cn } from "../../lib/cn";
@@ -9,6 +9,7 @@ export interface HeaderProps {
   theme: ThemeMode;
   onToggleTheme: () => void;
   savedCount: number;
+  onOpenAssistant: () => void;
 }
 
 interface NavLinkItem {
@@ -24,7 +25,7 @@ const NAV_LINKS: readonly NavLinkItem[] = [
   { label: "Messages", href: legacyPage("buyer-messages.html") },
 ];
 
-export function Header({ theme, onToggleTheme, savedCount }: HeaderProps): ReactElement {
+export function Header({ theme, onToggleTheme, savedCount, onOpenAssistant }: HeaderProps): ReactElement {
   const [menuOpen, setMenuOpen] = useState(false);
   useBodyScrollLock(menuOpen);
   const isDark = theme === "dark";
@@ -61,6 +62,15 @@ export function Header({ theme, onToggleTheme, savedCount }: HeaderProps): React
               {link.label}
             </a>
           ))}
+          <button
+            type="button"
+            onClick={onOpenAssistant}
+            aria-haspopup="dialog"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"
+          >
+            <Sparkles aria-hidden="true" className="h-4 w-4 text-accent" />
+            Assistant
+          </button>
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
@@ -148,6 +158,17 @@ export function Header({ theme, onToggleTheme, savedCount }: HeaderProps): React
               {link.label}
             </a>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(false);
+              onOpenAssistant();
+            }}
+            className="flex items-center gap-2 rounded-xl px-4 py-3.5 text-left text-lg font-bold text-white/90 hover:bg-white/10"
+          >
+            <Sparkles aria-hidden="true" className="h-5 w-5 text-accent" />
+            Assistant
+          </button>
         </nav>
         <div className="mt-auto grid gap-3 p-4">
           <a href={legacyPage("login.html")} className="rounded-xl bg-white py-3.5 text-center font-bold text-surface-inverse">

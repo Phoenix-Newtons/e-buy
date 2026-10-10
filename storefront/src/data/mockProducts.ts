@@ -3,24 +3,30 @@ import type {
   Condition,
   DeliveryMode,
   Product,
-  ProductRegion,
+  RegionId,
   Seller,
 } from "../types";
+import { SUPPORT_PHONE_E164 } from "./contact";
 
 /**
  * Demo listings used when Supabase credentials are not configured.
- * Seller phone numbers use the reserved-looking 256 700 000 xxx range and are fictional.
+ *
+ * Prices run from UGX 180,000 (Leather Sneakers, Jinja) to UGX 42,000,000 (Land Cruiser Prado, Mbarara).
+ * Every demo seller uses the E-Buy domestic line 0774 803 543 so that the "Call Seller" and
+ * "Chat via WhatsApp" buttons can be tested end to end. Live listings use each seller's own number.
  */
 
+const phone = SUPPORT_PHONE_E164;
+
 const SELLERS = {
-  mukisa: { id: "s-mukisa", name: "Mukisa Electronics", tier: "top-rated", rating: 4.9, reviewCount: 312, phone: "256700000101" },
-  nakato: { id: "s-nakato", name: "Nakato Fashion House", tier: "verified", rating: 4.7, reviewCount: 148, phone: "256700000102" },
-  okello: { id: "s-okello", name: "Okello Motors", tier: "top-rated", rating: 4.8, reviewCount: 96, phone: "256700000103" },
-  atuhaire: { id: "s-atuhaire", name: "Atuhaire Homes", tier: "verified", rating: 4.5, reviewCount: 64, phone: "256700000104" },
-  wasswa: { id: "s-wasswa", name: "Wasswa James", tier: "standard", rating: null, reviewCount: 0, phone: "256700000105" },
-  namutebi: { id: "s-namutebi", name: "Namutebi Agro Supplies", tier: "verified", rating: 4.6, reviewCount: 81, phone: "256700000106" },
-  opio: { id: "s-opio", name: "Opio Gadgets Gulu", tier: "standard", rating: 4.2, reviewCount: 17, phone: "256700000107" },
-  kiiza: { id: "s-kiiza", name: "Kiiza Furniture Mart", tier: "top-rated", rating: 4.9, reviewCount: 203, phone: "256700000108" },
+  mukisa: { id: "s-mukisa", name: "Mukisa Electronics", tier: "top-rated", rating: 4.9, reviewCount: 312, phone },
+  nakato: { id: "s-nakato", name: "Nakato Fashion House", tier: "verified", rating: 4.7, reviewCount: 148, phone },
+  okello: { id: "s-okello", name: "Okello Motors", tier: "top-rated", rating: 4.8, reviewCount: 96, phone },
+  atuhaire: { id: "s-atuhaire", name: "Atuhaire Tech Hub", tier: "verified", rating: 4.5, reviewCount: 64, phone },
+  wasswa: { id: "s-wasswa", name: "Wasswa James", tier: "standard", rating: null, reviewCount: 0, phone },
+  opio: { id: "s-opio", name: "Opio Gadgets Gulu", tier: "standard", rating: 4.2, reviewCount: 17, phone },
+  babirye: { id: "s-babirye", name: "Babirye Shoes & Bags", tier: "verified", rating: 4.6, reviewCount: 82, phone },
+  tumusiime: { id: "s-tumusiime", name: "Tumusiime Auto Yard", tier: "verified", rating: 4.4, reviewCount: 41, phone },
 } as const satisfies Record<string, Seller>;
 
 type SellerKey = keyof typeof SELLERS;
@@ -38,7 +44,7 @@ interface Seed {
   negotiable?: boolean;
   category: CategoryId;
   condition: Condition;
-  region: Exclude<ProductRegion, "other">;
+  region: RegionId;
   area: string;
   imageId: string | null;
   delivery: DeliveryMode;
@@ -47,126 +53,141 @@ interface Seed {
   trendingScore: number;
 }
 
-const REGION_LABELS: Record<Seed["region"], string> = {
+const REGION_LABELS: Record<RegionId, string> = {
   kampala: "Kampala, Central",
-  wakiso: "Wakiso, Central",
-  mukono: "Mukono, Central",
+  entebbe: "Entebbe, Central",
   jinja: "Jinja, Eastern",
-  mbale: "Mbale, Eastern",
   mbarara: "Mbarara, Western",
   gulu: "Gulu, Northern",
 };
 
 const SEEDS: readonly Seed[] = [
+  /* ----------------------------- Phones ----------------------------- */
   {
-    id: "p-001", title: "iPhone 13 128GB, Midnight", description: "Excellent condition, 90% battery health, original box and charger included.",
-    priceUgx: 1_850_000, negotiable: true, category: "phones", condition: "used", region: "kampala", area: "Kisaasi",
-    imageId: "1511707171634-5f897ff02aa9", delivery: "both", seller: "mukisa", hoursAgo: 3, trendingScore: 980,
+    id: "p-001", title: "iPhone 13 Pro 256GB, Sierra Blue", description: "Excellent condition, 91% battery health, original box and charger included. No scratches.",
+    priceUgx: 2_450_000, negotiable: true, category: "phones", condition: "used", region: "kampala", area: "Kisaasi",
+    imageId: "1632661674596-df8be070a5c5", delivery: "both", seller: "mukisa", hoursAgo: 3, trendingScore: 990,
   },
   {
-    id: "p-002", title: "Samsung Galaxy A15 (Sealed)", description: "Brand new in box with 1 year warranty. 128GB, 6GB RAM.",
-    priceUgx: 620_000, category: "phones", condition: "new", region: "kampala", area: "Nakasero",
+    id: "p-002", title: "Samsung Galaxy S23 Ultra 256GB", description: "Refurbished and tested, new battery fitted. Includes S Pen and 6 months shop warranty.",
+    priceUgx: 2_900_000, category: "phones", condition: "refurbished", region: "kampala", area: "Nakasero",
     imageId: "1610945265064-0e34e5519bbf", delivery: "both", seller: "mukisa", hoursAgo: 8, trendingScore: 870,
   },
   {
-    id: "p-003", title: "Tecno Spark 20 Pro", description: "Brand new, dual SIM, fast charging. Free screen protector.",
-    priceUgx: 480_000, category: "phones", condition: "new", region: "wakiso", area: "Entebbe Road",
+    id: "p-003", title: "Tecno Spark 20 Pro (Sealed)", description: "Brand new, dual SIM, fast charging. Free screen protector and cover.",
+    priceUgx: 520_000, category: "phones", condition: "new", region: "gulu", area: "Pece",
     imageId: "1598327105666-5b89351aff97", delivery: "delivery", seller: "opio", hoursAgo: 20, trendingScore: 410,
   },
   {
-    id: "p-004", title: "MacBook Air M1 13-inch", description: "Refurbished, new battery installed, 8GB RAM, 256GB SSD. 6 months shop warranty.",
-    priceUgx: 3_200_000, negotiable: true, category: "electronics", condition: "refurbished", region: "kampala", area: "Kikuubo",
-    imageId: "1517336714731-489689fd1ca8", delivery: "both", seller: "mukisa", hoursAgo: 12, trendingScore: 760,
+    id: "p-004", title: "iPhone 11 64GB, Black", description: "Refurbished, Face ID working, 87% battery. Comes with a cable and a 3 month warranty.",
+    priceUgx: 1_150_000, negotiable: true, category: "phones", condition: "refurbished", region: "mbarara", area: "Kakoba",
+    imageId: "1592750475338-74b7b21085ab", delivery: "both", seller: "atuhaire", hoursAgo: 30, trendingScore: 540,
   },
   {
-    id: "p-005", title: "LG 43-inch Smart TV", description: "Brand new 4K UHD, wall bracket included. Free delivery within Kampala.",
-    priceUgx: 1_450_000, category: "electronics", condition: "new", region: "kampala", area: "Ntinda",
-    imageId: "1593359677879-a4bb92f829d1", delivery: "delivery", seller: "mukisa", hoursAgo: 30, trendingScore: 640,
+    id: "p-005", title: "Infinix Hot 40i, 128GB", description: "Brand new in box with 1 year warranty. 8GB RAM, large battery for all-day use.",
+    priceUgx: 450_000, category: "phones", condition: "new", region: "jinja", area: "Jinja Central",
+    imageId: "1511707171634-5f897ff02aa9", delivery: "delivery", seller: "wasswa", hoursAgo: 26, trendingScore: 300,
   },
   {
-    id: "p-006", title: "PlayStation 5 Disc Edition", description: "Used for 6 months, comes with two controllers and FIFA 24.",
-    priceUgx: 2_300_000, negotiable: true, category: "electronics", condition: "used", region: "mukono", area: "Seeta",
-    imageId: "1606813907291-d86efa9b94db", delivery: "pickup", seller: "wasswa", hoursAgo: 5, trendingScore: 890,
+    id: "p-006", title: "Redmi Note 12, 6GB/128GB", description: "Brand new, AMOLED display, 33W fast charger in the box.",
+    priceUgx: 690_000, category: "phones", condition: "new", region: "entebbe", area: "Entebbe Town",
+    imageId: "1580910051074-3eb694886505", delivery: "both", seller: "atuhaire", hoursAgo: 44, trendingScore: 360,
+  },
+
+  /* --------------------------- Electronics -------------------------- */
+  {
+    id: "p-007", title: "MacBook Air M2 13-inch, 8GB/256GB", description: "Used for one year, 96% battery health, charger and sleeve included. Perfect for study and work.",
+    priceUgx: 4_500_000, negotiable: true, category: "electronics", condition: "used", region: "entebbe", area: "Kitoro",
+    imageId: "1517336714731-489689fd1ca8", delivery: "both", seller: "mukisa", hoursAgo: 12, trendingScore: 960,
   },
   {
-    id: "p-007", title: "HP EliteBook 840 G5", description: "Refurbished corporate laptop, Core i5 8th gen, 16GB RAM, 512GB SSD.",
+    id: "p-008", title: "HP EliteBook 840 G5 Laptop", description: "Refurbished corporate laptop, Core i5 8th gen, 16GB RAM, 512GB SSD.",
     priceUgx: 1_650_000, category: "electronics", condition: "refurbished", region: "mbarara", area: "Mbarara City",
     imageId: "1496181133206-80ce9b88a853", delivery: "both", seller: "atuhaire", hoursAgo: 52, trendingScore: 310,
   },
   {
-    id: "p-008", title: "Toyota RAV4 2012, Silver", description: "Clean import, low mileage, automatic, well maintained. Logbook ready.",
+    id: "p-009", title: "LG 43-inch 4K Smart TV", description: "Brand new, wall bracket included. Free delivery within Kampala.",
+    priceUgx: 1_450_000, category: "electronics", condition: "new", region: "kampala", area: "Ntinda",
+    imageId: "1593359677879-a4bb92f829d1", delivery: "delivery", seller: "mukisa", hoursAgo: 30, trendingScore: 640,
+  },
+  {
+    id: "p-010", title: "PlayStation 5 Disc Edition", description: "Used for 6 months, includes two controllers and FIFA 24.",
+    priceUgx: 2_300_000, negotiable: true, category: "electronics", condition: "used", region: "entebbe", area: "Abayita Ababiri",
+    imageId: "1606813907291-d86efa9b94db", delivery: "pickup", seller: "wasswa", hoursAgo: 5, trendingScore: 890,
+  },
+  {
+    id: "p-011", title: "Solar Home Lighting Kit, 100W", description: "Brand new 100W panel, 4 bulbs and phone charging ports. Installation available.",
+    priceUgx: 780_000, category: "electronics", condition: "new", region: "gulu", area: "Gulu City",
+    imageId: "1509391366360-2e959784a276", delivery: "both", seller: "opio", hoursAgo: 14, trendingScore: 640,
+  },
+  {
+    id: "p-012", title: "Canon EOS 200D DSLR with 18-55mm Lens", description: "Used, 12k shutter count, two batteries and a camera bag. Great for events.",
+    priceUgx: 1_900_000, negotiable: true, category: "electronics", condition: "used", region: "kampala", area: "Kololo",
+    imageId: "1516035069371-29a1b244cc32", delivery: "both", seller: "mukisa", hoursAgo: 66, trendingScore: 420,
+  },
+
+  /* ----------------------------- Fashion ---------------------------- */
+  {
+    id: "p-013", title: "Leather Sneakers, Tan (UK 9)", description: "Genuine leather, hand stitched, lightly worn twice. Original box included.",
+    priceUgx: 180_000, negotiable: true, category: "fashion", condition: "used", region: "jinja", area: "Walukuba",
+    imageId: "1549298916-b41d501d3772", delivery: "both", seller: "babirye", hoursAgo: 6, trendingScore: 610,
+  },
+  {
+    id: "p-014", title: "Kitenge Maxi Dress Set (3 pieces)", description: "Brand new handmade kitenge dresses, sizes S to XXL. Custom orders welcome.",
+    priceUgx: 240_000, category: "fashion", condition: "new", region: "kampala", area: "Owino Market",
+    imageId: "1594633312681-425c7b97ccd1", delivery: "delivery", seller: "nakato", hoursAgo: 9, trendingScore: 600,
+  },
+  {
+    id: "p-015", title: "Nike Air Force 1 (UK 8)", description: "Used, excellent condition, comes with the original box.",
+    priceUgx: 260_000, negotiable: true, category: "fashion", condition: "used", region: "gulu", area: "Layibi",
+    imageId: "1542291026-7eec264c27ff", delivery: "both", seller: "opio", hoursAgo: 40, trendingScore: 355,
+  },
+  {
+    id: "p-016", title: "Women's Gomesi, Silk Blend", description: "Brand new gomesi for weddings and introductions, with matching sash.",
+    priceUgx: 320_000, category: "fashion", condition: "new", region: "jinja", area: "Jinja Central",
+    imageId: "1594938298603-c8148c4dae35", delivery: "delivery", seller: "nakato", hoursAgo: 58, trendingScore: 280,
+  },
+  {
+    id: "p-017", title: "Men's Slim-Fit Suit, Navy", description: "Brand new two-piece suit, tailored cut. Alterations available in-store.",
+    priceUgx: 380_000, category: "fashion", condition: "new", region: "mbarara", area: "Mbarara City",
+    imageId: "1507679799987-c73779587ccf", delivery: "both", seller: "nakato", hoursAgo: 90, trendingScore: 190,
+  },
+  {
+    id: "p-018", title: "Designer Leather Handbag", description: "Brand new genuine leather handbag with dust cover and detachable strap.",
+    priceUgx: 450_000, category: "fashion", condition: "new", region: "entebbe", area: "Entebbe Town",
+    imageId: "1584917865442-de89df76afd3", delivery: "both", seller: "babirye", hoursAgo: 28, trendingScore: 330,
+  },
+
+  /* ----------------------------- Vehicles --------------------------- */
+  {
+    id: "p-019", title: "Toyota RAV4 2012, Silver", description: "Clean import, low mileage, automatic, well maintained. Logbook ready.",
     priceUgx: 38_500_000, negotiable: true, category: "vehicles", condition: "used", region: "kampala", area: "Bugolobi",
     imageId: "1494976388531-d1058494cdd8", delivery: "pickup", seller: "okello", hoursAgo: 26, trendingScore: 720,
   },
   {
-    id: "p-009", title: "Bajaj Boxer 150 Boda Boda", description: "Brand new motorcycle, free registration support and first service.",
+    id: "p-020", title: "Toyota Noah 2010, 8 Seater", description: "Family van, fuel efficient, new tyres and a fresh service. Duty paid.",
+    priceUgx: 21_000_000, negotiable: true, category: "vehicles", condition: "used", region: "kampala", area: "Kansanga",
+    imageId: "1533473359331-0135ef1b58bf", delivery: "pickup", seller: "tumusiime", hoursAgo: 72, trendingScore: 480,
+  },
+  {
+    id: "p-021", title: "Toyota Land Cruiser Prado TX 2014", description: "Diesel, leather interior, sunroof, full service history. Logbook in hand.",
+    priceUgx: 42_000_000, negotiable: true, category: "vehicles", condition: "used", region: "mbarara", area: "Nyamitanga",
+    imageId: "1519641471654-76ce0107ad1b", delivery: "pickup", seller: "tumusiime", hoursAgo: 36, trendingScore: 650,
+  },
+  {
+    id: "p-022", title: "Bajaj Boxer 150 Boda Boda", description: "Brand new motorcycle, free registration support and first service.",
     priceUgx: 5_900_000, category: "vehicles", condition: "new", region: "gulu", area: "Pece",
     imageId: "1558981806-ec527fa84c39", delivery: "delivery", seller: "okello", hoursAgo: 70, trendingScore: 530,
   },
   {
-    id: "p-010", title: "Subaru Forester 2010", description: "Used, 4WD, leather seats, sunroof. Recently serviced.",
-    priceUgx: 24_000_000, negotiable: true, category: "vehicles", condition: "used", region: "jinja", area: "Walukuba",
-    imageId: "1533473359331-0135ef1b58bf", delivery: "pickup", seller: "okello", hoursAgo: 110, trendingScore: 280,
+    id: "p-023", title: "Subaru Forester 2010, 4WD", description: "Used, leather seats, sunroof, recently serviced. Test drives welcome.",
+    priceUgx: 24_000_000, negotiable: true, category: "vehicles", condition: "used", region: "jinja", area: "Njeru",
+    imageId: "1503376780353-7e6692767b70", delivery: "pickup", seller: "okello", hoursAgo: 110, trendingScore: 280,
   },
   {
-    id: "p-011", title: "Kitenge Maxi Dress Collection", description: "Brand new handmade kitenge dresses, sizes S to XXL. Custom orders welcome.",
-    priceUgx: 85_000, category: "fashion", condition: "new", region: "kampala", area: "Owino Market",
-    imageId: "1594633312681-425c7b97ccd1", delivery: "delivery", seller: "nakato", hoursAgo: 6, trendingScore: 600,
-  },
-  {
-    id: "p-012", title: "Nike Air Force 1 (UK 9)", description: "Used twice, excellent condition, original box included.",
-    priceUgx: 220_000, negotiable: true, category: "fashion", condition: "used", region: "wakiso", area: "Kira",
-    imageId: "1542291026-7eec264c27ff", delivery: "both", seller: "nakato", hoursAgo: 40, trendingScore: 355,
-  },
-  {
-    id: "p-013", title: "Men's Slim-Fit Suit, Navy", description: "Brand new two-piece suit, tailored cut. Alterations available in-store.",
-    priceUgx: 280_000, category: "fashion", condition: "new", region: "mbale", area: "Mbale Town",
-    imageId: "1507679799987-c73779587ccf", delivery: "both", seller: "nakato", hoursAgo: 90, trendingScore: 190,
-  },
-  {
-    id: "p-014", title: "Plot of Land, 50x100ft with Title", description: "Residential plot in a fast-growing neighbourhood, ready mailo title, near tarmac.",
-    priceUgx: 65_000_000, negotiable: true, category: "real-estate", condition: "new", region: "wakiso", area: "Namugongo",
-    imageId: "1500382017468-9049fed747ef", delivery: "pickup", seller: "atuhaire", hoursAgo: 15, trendingScore: 450,
-  },
-  {
-    id: "p-015", title: "2 Bedroom Apartment for Rent", description: "Self-contained, secure compound, water and parking. Monthly rent.",
-    priceUgx: 1_200_000, category: "real-estate", condition: "used", region: "kampala", area: "Muyenga",
-    imageId: "1522708323590-d24dbb6b0267", delivery: "pickup", seller: "atuhaire", hoursAgo: 48, trendingScore: 520,
-  },
-  {
-    id: "p-016", title: "3-Seater Fabric Sofa Set", description: "Brand new, solid hardwood frame, available in grey and brown.",
-    priceUgx: 1_350_000, negotiable: true, category: "furniture", condition: "new", region: "kampala", area: "Ntinda",
-    imageId: "1555041469-a586c61ea9bc", delivery: "delivery", seller: "kiiza", hoursAgo: 9, trendingScore: 580,
-  },
-  {
-    id: "p-017", title: "Queen Size Orthopaedic Mattress", description: "Brand new 6x6 high-density mattress, 5-year warranty.",
-    priceUgx: 690_000, category: "furniture", condition: "new", region: "mukono", area: "Mukono Town",
-    imageId: "1631049307264-da0ec9d70304", delivery: "delivery", seller: "kiiza", hoursAgo: 33, trendingScore: 335,
-  },
-  {
-    id: "p-018", title: "Used Dining Table with 6 Chairs", description: "Mahogany dining table, minor wear, very sturdy.",
-    priceUgx: 750_000, negotiable: true, category: "furniture", condition: "used", region: "jinja", area: "Jinja Central",
-    imageId: "1617806118233-18e1de247200", delivery: "pickup", seller: "wasswa", hoursAgo: 120, trendingScore: 140,
-  },
-  {
-    id: "p-019", title: "Hybrid Maize Seed, 25kg Bag", description: "Certified high-yield hybrid seed, drought tolerant. Bulk discounts available.",
-    priceUgx: 135_000, category: "agriculture", condition: "new", region: "gulu", area: "Layibi",
-    imageId: "1574943320219-553eb213f72d", delivery: "delivery", seller: "namutebi", hoursAgo: 18, trendingScore: 270,
-  },
-  {
-    id: "p-020", title: "Boer Goats, Breeding Pair", description: "Healthy vaccinated Boer goats, good for breeding. Farm visits welcome.",
-    priceUgx: 900_000, negotiable: true, category: "agriculture", condition: "new", region: "mbarara", area: "Kakoba",
-    imageId: "1524024973431-2ad916746881", delivery: "both", seller: "namutebi", hoursAgo: 60, trendingScore: 365,
-  },
-  {
-    id: "p-021", title: "Professional Photography & Video", description: "Weddings, events and product shoots. Edited photos within 3 days.",
-    priceUgx: 450_000, negotiable: true, category: "services", condition: "new", region: "kampala", area: "Kololo",
-    imageId: "1492691527719-9d1e07e534b4", delivery: "delivery", seller: "opio", hoursAgo: 22, trendingScore: 240,
-  },
-  {
-    id: "p-022", title: "Solar Home Lighting Kit", description: "New 100W panel, 4 bulbs, phone charging ports. Installation available.",
-    priceUgx: 780_000, category: "electronics", condition: "new", region: "gulu", area: "Gulu City",
-    imageId: "1509391366360-2e959784a276", delivery: "both", seller: "opio", hoursAgo: 14, trendingScore: 640,
+    id: "p-024", title: "Toyota Premio 2008, Pearl White", description: "Refurbished interior, new battery and tyres, very clean. Duty paid.",
+    priceUgx: 17_500_000, negotiable: true, category: "vehicles", condition: "refurbished", region: "entebbe", area: "Katabi",
+    imageId: "1550355291-bbee04a92027", delivery: "pickup", seller: "tumusiime", hoursAgo: 84, trendingScore: 340,
   },
 ];
 

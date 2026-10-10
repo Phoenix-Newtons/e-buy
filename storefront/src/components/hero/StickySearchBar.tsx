@@ -1,26 +1,31 @@
 import { useMemo, useState, type Dispatch, type FormEvent, type ReactElement } from "react";
 import { Banknote, Compass, LayoutGrid, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
-import { CATEGORIES, PRICE_BRACKETS, REGIONS } from "../../data/constants";
+import { PRICE_BRACKETS, REGIONS } from "../../data/constants";
 import { useIsStuck } from "../../hooks/useIsStuck";
 import { describePriceRange } from "../../lib/catalog";
 import { cn } from "../../lib/cn";
-import type { CategoryId, FilterAction, FilterState, RegionId } from "../../types";
+import type { CategoryId, CategoryOption, FilterAction, FilterState, RegionId } from "../../types";
 import { Select, type SelectOption } from "../ui/Select";
 
 export interface StickySearchBarProps {
   filters: FilterState;
   dispatch: Dispatch<FilterAction>;
   resultCount: number;
+  /** Categories that have listings. */
+  categories: readonly CategoryOption[];
   /** Called after the form is submitted, e.g. to scroll to the results. */
   onSubmit: () => void;
 }
 
 const HEADER_HEIGHT = 64;
 const CUSTOM_PRICE_ID = "custom";
+const MULTIPLE_REGIONS_ID = "multiple";
 
-const REGION_OPTIONS: readonly SelectOption<RegionId | "all">[] = [
+type RegionChoice = RegionId | "all" | typeof MULTIPLE_REGIONS_ID;
+
+const BASE_REGION_OPTIONS: readonly SelectOption<RegionChoice>[] = [
   { value: "all", label: "All of Uganda", description: "Every district", icon: Compass },
-  ...REGIONS.map((region): SelectOption<RegionId | "all"> => ({
+  ...REGIONS.map((region): SelectOption<RegionChoice> => ({
     value: region.id,
     label: region.label,
     description: `${region.subregion} Region`,
@@ -28,16 +33,7 @@ const REGION_OPTIONS: readonly SelectOption<RegionId | "all">[] = [
   })),
 ];
 
-const CATEGORY_OPTIONS: readonly SelectOption<CategoryId | "all">[] = [
-  { value: "all", label: "All categories", icon: LayoutGrid },
-  ...CATEGORIES.map((category): SelectOption<CategoryId | "all"> => ({
-    value: category.id,
-    label: category.label,
-    icon: category.icon,
-  })),
-];
-
-export function StickySearchBar({ filters, dispatch, resultCount, onSubmit }: StickySearchBarProps): ReactElement {
+export function StickySearchBar({ filters, dispatch, resultCount, categories, onSubmit }: StickySearchBarProps): ReactElement {
   const { ref, isStuck } = useIsStuck<HTMLDivElement>(HEADER_HEIGHT);
   const [expanded, setExpanded] = useState(false);
 
@@ -51,6 +47,27 @@ export function StickySearchBar({ filters, dispatch, resultCount, onSubmit }: St
     return options;
   }, [matchingBracket, filters.priceMin, filters.priceMax]);
 
+  const categoryOptions = useMemo(
+    (): readonly SelectOption<CategoryId | "all">[] => [
+      { value: "all", label: "All categories", icon: LayoutGrid },
+      ...categories.map((category): SelectOption<CategoryId | "all"> => ({ value: category.id, label: category.label, icon: category.icon })),
+    ],
+    [categories],
+  );
+
+  // The sidebar allows several districts at once; the quick select shows "N locations" in that case.
+  const regionOptions = useMemo((): readonly SelectOption<RegionChoice>[] => {
+    if (filters.regions.length < 2) return BASE_REGION_OPTIONS;
+    return [...BASE_REGION_OPTIONS, { value: MULTIPLE_REGIONS_ID, label: `${filters.regions.length} locations`, description: "Chosen in filters", icon: MapPin }];
+  }, [filters.regions.length]);
+
+  const regionValue: RegionChoice = filters.regions.length === 0 ? "all" : filters.regions.length === 1 ? (filters.regions[0] ?? "all") : MULTIPLE_REGIONS_ID;
+
+  const handleRegionChange = (choice: RegionChoice): void => {
+    if (choice === MULTIPLE_REGIONS_ID) return;
+    dispatch({ type: "setRegions", regions: choice === "all" ? [] : [choice] });
+  };
+
   const handlePriceChange = (id: string): void => {
     const bracket = PRICE_BRACKETS.find((item) => item.id === id);
     if (bracket) dispatch({ type: "setPriceRange", min: bracket.min, max: bracket.max });
@@ -63,7 +80,7 @@ export function StickySearchBar({ filters, dispatch, resultCount, onSubmit }: St
   };
 
   const advancedFilterCount =
-    (filters.region !== "all" ? 1 : 0) + (filters.category !== "all" ? 1 : 0) + (matchingBracket?.id === "any" ? 0 : 1);
+    (filters.regions.length > 0 ? 1 : 0) + (filters.category !== "all" ? 1 : 0) + (matchingBracket?.id === "any" ? 0 : 1);
 
   return (
     <div
@@ -133,18 +150,18 @@ export function StickySearchBar({ filters, dispatch, resultCount, onSubmit }: St
               expanded ? "grid" : "hidden lg:flex",
             )}
           >
-            <Select<RegionId | "all">
+            <Select<RegionChoice>
               label="Region"
               icon={MapPin}
-              options={REGION_OPTIONS}
-              value={filters.region}
-              onChange={(region) => dispatch({ type: "setRegion", region })}
+              options={regionOptions}
+              value={regionValue}
+              onChange={handleRegionChange}
               className="lg:flex-1 lg:pl-1"
             />
             <Select<CategoryId | "all">
               label="Category"
               icon={LayoutGrid}
-              options={CATEGORY_OPTIONS}
+              options={categoryOptions}
               value={filters.category}
               onChange={(category) => dispatch({ type: "setCategory", category })}
               className="lg:flex-1 lg:pl-1"

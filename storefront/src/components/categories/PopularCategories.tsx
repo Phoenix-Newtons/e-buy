@@ -1,19 +1,21 @@
 import type { ReactElement } from "react";
 import { ChevronLeft, ChevronRight, LayoutGrid } from "lucide-react";
-import { CATEGORIES, CATEGORY_TONE_CLASSES } from "../../data/constants";
+import { CATEGORY_TONE_CLASSES } from "../../data/constants";
 import { useHorizontalScroller } from "../../hooks/useHorizontalScroller";
 import { cn } from "../../lib/cn";
 import { pluralize } from "../../lib/format";
-import type { CategoryId } from "../../types";
+import type { CategoryId, CategoryOption } from "../../types";
 
 export interface PopularCategoriesProps {
   selected: CategoryId | "all";
+  /** Categories that have at least one listing. */
+  categories: readonly CategoryOption[];
   counts: Readonly<Record<CategoryId, number>>;
   totalCount: number;
   onSelect: (category: CategoryId | "all") => void;
 }
 
-export function PopularCategories({ selected, counts, totalCount, onSelect }: PopularCategoriesProps): ReactElement {
+export function PopularCategories({ selected, categories, counts, totalCount, onSelect }: PopularCategoriesProps): ReactElement {
   const { ref, canScrollPrev, canScrollNext, scrollByPage } = useHorizontalScroller<HTMLUListElement>();
 
   return (
@@ -97,7 +99,7 @@ export function PopularCategories({ selected, counts, totalCount, onSelect }: Po
             </button>
           </li>
 
-          {CATEGORIES.map((category) => {
+          {categories.map((category) => {
             const isActive = selected === category.id;
             const tone = CATEGORY_TONE_CLASSES[category.tone];
             const Icon = category.icon;
